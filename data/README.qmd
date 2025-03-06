@@ -1,0 +1,27 @@
+---
+title: "Rugby Data Codebook"
+format: html
+editor: visual
+---
+
+## Codebook
+
+Gives a description of each variable being measured in the rugby dataset.
+
+|Columns     |Description                                   |
+|------------|----------------------------------------------|
+|date        |Date when the match was played                |
+|home_team   |Country that is playing at home               |
+|away_team   |Country that is playing away from home        |
+|home_score  |Home team number of points scored             |
+|away_score  |Away team number of points scored             |
+|competition |Name of series or tournament                  |
+|stadium     |Name of the stadium match is being played in  |
+|city        |Name of the city match is being played in     |
+|country     |Name of the country match is being played in  |
+|neutral     |Indicates if match is played at neutral venue |
+|world_cup   |Indicates if match is played in world cup     |
+
+```{python}
+print("hi")
+```

@@ -1,0 +1,42 @@
+---
+title: "Project Proposal"
+author: "Aneesh & Ken"
+date: "2025-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Research Questions
+
+Dataset 1: Since one of us is an avid sports fan and another is a rugby player, we want to combine our data science and sports knowledge to predict something exciting and important in the sporting world. Using game results from ordinary fixtures since 1999, we analyze whether a relationship exists between World Cup performances and regular fixture performances. Using a model, we predict the winner of the 2027 World Cup based on past data, comparing ordinary fixture performance with World Cup performance. The past 10 winners of the Rugby World Cup have all been among the tier-one men’s teams, so we assume this trend will continue. Based on our analysis, we predict that RSA, IRE, or NZ will be crowned World Cup champions in 2027. 
+
+
+Dataset 2:
+
+## Data
+
+Dataset 1: International Rugby Union results from 1871 to 2024
+
+The Rugby dataset includes information from tier-one men's international rugby teams. This includes England, Wales, Ireland, Scotland, Italy, France, South Africa, New Zealand, Australia, and Argentina. Each row represents a single match played between one of two of the tier-one teams. The data is gathered from Wikipedia.
+
+Columns:
+
+- date - date of the match
+- home_team - the name of the home team
+- away_team - the name of the away team
+- home_score - full-time home team score
+- away_score - full-time away team score
+- competition - the name of the tournament
+- stadium - the name of the stadium where the match was played
+- city - the name of the city/town/administrative unit where the match was played
+- country - the name of the country where the match was played
+- neutral - TRUE/FALSE column indicating whether the match was played at a neutral venue
+- world_cup - TRUE/FALSE column indicating whether the match was during a Rugby World Cup
+
+
+Dataset 2: 
+
+

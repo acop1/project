@@ -1,5 +1,5 @@
 ---
-title: "Project Proposal"
+title: "MATH 244 Capstone Project Proposal"
 author: "Aneesh & Ken"
 date: "2025-03-06"
 output: html_document
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Dataset 1: Since one of us is an avid sports fan and another is a rugby player, we want to combine our data science and sports knowledge to predict something exciting and important in the sporting world. Using game results from ordinary fixtures since 1999, we analyze whether a relationship exists between World Cup performances and regular fixture performances. Using a model, we predict the winner of the 2027 World Cup based on past data, comparing ordinary fixture performance with World Cup performance. The past 10 winners of the Rugby World Cup have all been among the tier-one men’s teams, so we assume this trend will continue. Based on our analysis, we predict that RSA, IRE, or NZ will be crowned World Cup champions in 2027. 
 
 
-Dataset 2:
+Dataset 2: The rise of fentanyl has become a critical public health crisis worldwide, particularly in the United States. Originally developed as a powerful synthetic opioid for pain management, fentanyl is up to 50 times stronger than heroin and 100 times stronger than morphine. Over the past decade, illicitly manufactured fentanyl has flooded drug markets, often mixed with other substances, leading to a sharp increase in overdoses and deaths. This issue is important because fentanyl’s potency makes even tiny amounts lethal, posing a significant risk to both recreational drug users and those unknowingly exposed. Its rapid spread has strained healthcare systems, law enforcement, and communities, making it a key focus for policymakers, public health officials, and harm reduction advocates seeking to combat the ongoing opioid epidemic. Data from the CBP Drug Seizure Statistics will be used to analyze whether a relationship exists between the month the overdose was reported and the count of the event. By developing a predictive model, we aim to identify future high-risk periods for fentanyl overdoses.
 
 ## Data
 
@@ -37,6 +37,19 @@ Columns:
 - world_cup - TRUE/FALSE column indicating whether the match was during a Rugby World Cup
 
 
-Dataset 2: 
+Dataset 2: The drug seizure dataset includes every single drug seizure listed in reverse chronological order. Each row contains the type of drug, location, quantity, region, month, and year, along with other variables. The data was gathered by U.S. Customs and Borders Protection, and the data was extracted from live CBP systems and data sources.
+
+Columns:
+
+- FY: The fiscal year the incident took place
+- Month (abbv): The month the incident took place (abbreviated) 
+- Component: Who in CBP was lead on seizure 
+- Region: The border region in which the incident occurred; border regions are defined by each component
+- Land Filter: The part of the border region surrounded by land or coast 
+- Area of Responsibility or Branch: The Field Office sector or Branch where the incident occurred 
+- Drug Type: The category of drug that was seized 
+- Count of Event: The number of seizure events by drug type (Discrete variable)
+- Sum Qty (lbs): The amount of drugs seized in pounds (lbs) (Continuous variable)
+
 
 

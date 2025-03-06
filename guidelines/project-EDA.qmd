@@ -1,0 +1,140 @@
+---
+title: "MATH 244 Project: Exploratory Data Analysis"
+format: 
+  html:
+    page-layout: full
+    theme: cosmo
+    toc: true
+    toc-title: "Contents"
+    embed-resources: true
+---
+
+Exploratory Data Analysis due **Thursday, April 3, 2025**
+
+Preliminary Analysis due **Thursday, April 17, 2025**
+
+Peer Review of Preliminary Analysis due **Thursday, April 24, 2025**
+
+Project presentations due **Thursday, May 1st and Tuesday, May 6th**
+
+Final report due **Tuesday, May 6, 2025**
+
+Peer and Self Evaluation due **Tuesday, May 6, 2025**
+
+# Introduction
+
+The goal of this project is to demonstrate proficiency in data science 
+techniques by conducting a novel analysis of a dataset of your own choosing
+or creation. The dataset may already exist, or you may collect your own data 
+by scraping the web. You will also get practice presenting 
+your results.
+
+Your project can be inferential in nature or can be focused more on prediction.
+Your project can involve regression or classification (or elements of both,
+but don't spread yourself too thin).
+
+# Brief Project Logistics
+
+The final project will be done in pairs of your choice.
+
+The seven deliverables for the final project are (with associated percentage of 
+the overall project grade):
+
+1. A project proposal describing two datasets of interest (5%)
+2. Exploratory Data Analysis (7.5%)
+3. A preliminary analysis using Quarto (rough draft of the report)
+    - Peer Review (15%) 
+4. Reproducible slides using Quarto + presentation (30%)
+5. A written, reproducible report using Quarto detailing your analysis (30%) 
+6. Evaluation of your own and team members efforts on project  (2.5%)
+7. Your GitHub repo for the project (10%)
+
+## Exploratory Data Analysis
+
+This assignment is a chance to explore your data. Be creative with your plots!
+Note you only need to do this analysis for **one** of the datasets you picked out. 
+
+### Contents
+
+#### Exploring the Data
+
+Answer the following questions:
+
+- What is your outcome variable(s)? How well does it measure the outcome
+you are interested? How does it relate to your expectations? 
+- What are your key explanatory variables? 
+
+In addition, create a table of summary statistics for the variables you are 
+planning to use.
+
+#### Data Wrangling and Transformation
+
+Answer the following question:
+
+- What data cleaning did you have to do?
+- How did you wrangle the data?
+- Are you deciding to exclude any observations? If so, why?
+- Did you have to create any new variables from existing variables? If so,
+how and why?
+
+#### Codebook
+
+You must add a *codebook* -- a description of all variables you are using, 
+including ones you are creating for this project -- to the 
+README.md page of the `data/` folder of your repo. 
+
+#### Data Visualization
+
+You must include at least 4 visualizations of your data made in R. You must 
+include your outcome variable in at least two plots and your 
+key explanatory variable in at least two of these plots. You must use 
+visualizations that are *appropriate* for the data type (categorical vs numeric,
+continuous vs discrete) of your outcome and explanatory variables. For example,
+you should not use a histogram to plot a categorical variable.
+
+#### (OPTIONAL) Data Analysis
+
+If you would like, you can start to sketch out some data analysis/modeling. This
+will not be counted for or against you, but I will give you feedback on it.
+
+
+### Formatting
+
+All parts of the Exploratory Data Analysis should be professionally 
+formatted. For example, this means labeling plots and figures. 
+The final product should be a pdf or html file rendered from a 
+quarto file.
+
+**You must comment your code!**
+
+**You must suppress all warnings and messages.**
+
+**All plots must be professional in appearance, including meaningful axes and 
+legend label and titles.**
+
+**For this Exploratory Data Analysis assignment, you must display
+your code in the rendered output.**
+
+Style and format do count for this assignment, so please take the time to make
+sure that everything looks good and that your data and code are properly formatted.
+
+### Workflow and Organization
+
+You should commit to your repo regularly as you work on your project, and you
+should keep your repo well organized.
+
+### Grading
+
+Submit your Data Exploration and Visualization assignment by 
+**Thursday, April 3, 2025 at 11:59 PM**. 
+
+The Data Exploration and Visualization assignment will be graded as follows:
+
+Total                                                   | 55 pts
+--------------------------------------------------------|-------
+**Exploring the Data**                                  | 10 pts
+**Data Wrangling and Transformation**                   | 10 pts
+**Codebook**                                            | 5 pts
+**Data visualizations**                                 | 20 pts
+**Formatting**                                          | 5 pts
+**Workflow and Organization**                           | 5 pts

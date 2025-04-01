@@ -50,6 +50,3 @@ Columns:
 - Drug Type: The category of drug that was seized 
 - Count of Event: The number of seizure events by drug type (Discrete variable)
 - Sum Qty (lbs): The amount of drugs seized in pounds (lbs) (Continuous variable)
-
-
-

@@ -1,11 +1,27 @@
 Exploring the Data
--One of the variables is the performance of these top tier teams in non-world cup games vs world cup games.
 
+-  World Cup performance: This can be measured in different ways, such as:
+
+    -   Final placement (1st, 2nd, 3rd, etc.)
+
+    -   Knockout stage reached (Group Stage, Quarterfinals, Semifinals, etc.)
+
+    -   Win percentage in the World Cup
+
+    -   Number of points per match in World Cup games
 
 Data Wrangling and Transformation
- -  Our CSV file contains data dating back to 1871 and we are only going to use data from 2000 onwards.
-Thus, we will clean out any data before the year of 2000 because they will not be useful for our project.
-   
+
+- Filtering data: Keeping only matches from 1999 onward.
+
+-   Merging datasets: If you have separate datasets for regular fixtures and World Cup matches, they need to be joined.
+
+-   Creating new metrics (e.g., rolling averages, Elo ratings).
+
+-   Transforming categorical variables (e.g., converting team names into numerical indicators or factors).
+
+
+Remove unnecessary columns if needed (e.g., if stadium or city is not part of your analysis).
 ```{python}
-print("red")
+print("Data Analysis")
 ```

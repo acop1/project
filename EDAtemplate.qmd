@@ -4,48 +4,37 @@ format: html
 editor: visual
 ---
 
-#1. Data Overview
-Dataset Structure: Check rows, columns, and data types.
+#1. Data Overview Dataset Structure: Check rows, columns, and data types.
 
 Missing Values: Identify and handle missing data.
 
 Basic Statistics: Summary stats (mean, median, min, max, etc.) for numerical variables.
 
-Key Variables to Examine (Depending on Dataset)
-Match Data: Date, teams, score, venue, competition.
+Key Variables to Examine (Depending on Dataset) Match Data: Date, teams, score, venue, competition.
 
 Team Data: Win/loss records, points scored/conceded, penalties.
 
 Game Events: Kicks, lineouts, scrums, turnovers.
 
+#2. Univariate Analysis Analyze individual variables to understand distributions.
 
-#2. Univariate Analysis
-Analyze individual variables to understand distributions.
+Numerical Variables Distribution Plots: Histograms, boxplots (e.g., points scored, tackles made).
 
-Numerical Variables
-Distribution Plots: Histograms, boxplots (e.g., points scored, tackles made).
+Key Metrics: Average points per match.
 
-Key Metrics:
-Average points per match.
-
-Categorical Variables
-Bar Charts:
+Categorical Variables Bar Charts:
 
 Most frequent match outcomes (win/loss/draw).
 
 Top teams by wins or points.
 
+#3. Bivariate & Multivariate Analysis Examine relationships between variables.
 
-#3. Bivariate & Multivariate Analysis
-Examine relationships between variables.
-
-Team Performance
-Win/Loss vs. Home/Away: Do teams perform better at home?
+Team Performance Win/Loss vs. Home/Away: Do teams perform better at home?
 
 Score Difference Analysis: How often do matches have close margins?
 
 Points Scored vs. Conceded: Defensive vs. offensive strength.
-
 
 Correlation Analysis:
 
@@ -53,7 +42,6 @@ Does more possession lead to more points?
 
 Are more penalties associated with losses?
 
-#4. Time-Based Trends
-Seasonal Performance: Do teams perform better at certain times of the year?
+#4. Time-Based Trends Seasonal Performance: Do teams perform better at certain times of the year?
 
 Team Improvement/Decline: Win rate trends over seasons.

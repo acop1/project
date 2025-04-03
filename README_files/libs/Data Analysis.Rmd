@@ -14,14 +14,41 @@ Data Wrangling and Transformation
 
 -   Filtering data: Keeping only matches from 1999 onward.
 
--   Merging datasets: If you have separate datasets for regular fixtures and World Cup matches, they need to be joined.
+-   Merging datasets: We will assess both the World Cup datasets and non-World Cup datasets.
 
 -   Creating new metrics (e.g., rolling averages, Elo ratings).
 
+-   Creating new columns: For example, you might want to create a column that indicates whether a match was a knockout stage match or not.
+
+-   Create a few new columns which may include:
+
+   
+
 -   Transforming categorical variables (e.g., converting team names into numerical indicators or factors).
 
-Remove unnecessary columns if needed (e.g., if stadium or city is not part of your analysis).
+-   Remove unnecessary columns if needed (e.g., if stadium or city is not part of your analysis).
 
-```{python}
-print("Data Analysis")
+```{python creating a table of the terms and their definitions}
+# Create a table of terms and their definitions
+import pandas as pd
+terms = {
+    "Term": [
+        "World Cup performance",
+        "Final placement",
+        "Knockout stage reached",
+        "Win percentage",
+        "Points per match",
+       
+    ],
+    "Definition": [
+        "A measure of a team's success in the World Cup.",
+        "The final position a team finishes in the tournament.",
+        "The stage of the tournament a team reaches (e.g., Group Stage, Quarterfinals).",
+        "The percentage of matches won by a team in the World Cup.",
+        "The average number of points scored by a team per match in the World Cup.",
+       
+    ]
+}
+terms_df = pd.DataFrame(terms)
+
 ```

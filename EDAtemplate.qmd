@@ -45,3 +45,53 @@ Are more penalties associated with losses?
 #4. Time-Based Trends Seasonal Performance: Do teams perform better at certain times of the year?
 
 Team Improvement/Decline: Win rate trends over seasons.
+
+
+```{python loading_packages}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+```
+
+```{python import_data}
+rugbyDF = pd.read_csv("data/rugby.csv")
+rugbyDF.shape
+#(2783, 11)
+```
+
+```{python trimming_data}
+
+#only keeping data after 1999
+#will create a year col and then trim the data
+
+rugbyDF['year'] = rugbyDF['date'].str[0:4].astype(int)
+rugbyDF = rugbyDF[rugbyDF.year > 1998]
+rugbyDF.shape
+#new shape of dataframe: (1234,12)
+```
+
+```{python col_types}
+
+for cols in rugbyDF.columns:
+  print(cols + ": " + (str)(rugbyDF[cols].dtype))
+
+#Since there are 2 numerical cols, i can get summary statistics on them
+#year variable will not be taken into account for summary statistics
+rugbyDF.describe()
+```
+
+We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.
+
+
+
+
+
+
+
+
+
+
+
+

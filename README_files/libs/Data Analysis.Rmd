@@ -1,6 +1,6 @@
 Exploring the Data
 
--  World Cup performance: This can be measured in different ways, such as:
+-   World Cup performance: This can be measured in different ways, such as:
 
     -   Final placement (1st, 2nd, 3rd, etc.)
 
@@ -12,7 +12,7 @@ Exploring the Data
 
 Data Wrangling and Transformation
 
-- Filtering data: Keeping only matches from 1999 onward.
+-   Filtering data: Keeping only matches from 1999 onward.
 
 -   Merging datasets: If you have separate datasets for regular fixtures and World Cup matches, they need to be joined.
 
@@ -20,8 +20,8 @@ Data Wrangling and Transformation
 
 -   Transforming categorical variables (e.g., converting team names into numerical indicators or factors).
 
-
 Remove unnecessary columns if needed (e.g., if stadium or city is not part of your analysis).
+
 ```{python}
 print("Data Analysis")
 ```

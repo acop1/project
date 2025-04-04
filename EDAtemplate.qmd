@@ -14,8 +14,6 @@ Key Variables to Examine (Depending on Dataset) Match Data: Date, teams, score, 
 
 Team Data: Win/loss records, points scored/conceded, penalties.
 
-Game Events: Kicks, lineouts, scrums, turnovers.
-
 #2. Univariate Analysis Analyze individual variables to understand distributions.
 
 Numerical Variables Distribution Plots: Histograms, boxplots (e.g., points scored, tackles made).
@@ -68,8 +66,19 @@ rugbyDF.shape
 
 rugbyDF['year'] = rugbyDF['date'].str[0:4].astype(int)
 rugbyDF = rugbyDF[rugbyDF.year > 1998]
+rugbyDF.dropna(inplace = True)
 rugbyDF.shape
-#new shape of dataframe: (1234,12)
+#new shape of dataframe: (1230,12)
+```
+```{python create_homeWin}
+#creating variable to track if home or away team won
+#created weights for win, draw, and loss
+rugbyDF["homeWin"] = np.where(rugbyDF["home_score"] > rugbyDF["away_score"], 1,0)
+rugbyDF["awayWin"] = np.where(rugbyDF["home_score"] < rugbyDF["away_score"], 1,0)
+
+#creating a count var to help with num of games played later on
+rugbyDF["count"] = 1
+
 ```
 
 ```{python col_types}
@@ -84,6 +93,65 @@ rugbyDF.describe()
 
 We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.
 
+We also notice that the home team won ~59.6%* o the games contested. 
+
+*This does not account for games that take place in neutral venues.
+
+```{python}
+#create diff df by teams, then find the summary statistics for those teams.
+unq_hteams = rugbyDF['home_team'].unique()
+unq_ateams = rugbyDF['away_team'].unique()
+unq_teams = np.unique((unq_hteams, unq_ateams))
+unq_teams
+
+#shortens the df to only include awayteam, awaywin or hometeam, homewin
+rugbyDFH = rugbyDF[["home_team","homeWin","count"]]
+rugbyDFA = rugbyDF[["away_team","awayWin","count"]]
+
+#groups the data by team
+groupedH = rugbyDFH.groupby('home_team').sum()
+groupedA = rugbyDFA.groupby('away_team').sum()
+
+#renames the axis to the same thing
+groupedA = groupedA.rename_axis('team')
+groupedH = groupedH.rename_axis('team')
+
+#find team win percentage by away and home 
+groupedH["home_win%"] = groupedH["homeWin"]/groupedH["count"]
+groupedA["away_win%"] = groupedA["awayWin"]/groupedA["count"]
+
+#renames count so that they dont clash when merging
+groupedH = groupedH.rename(columns={'count': 'count_home'})
+groupedA = groupedA.rename(columns={'count': 'count_away'})
+
+#merge the data frames
+teams = pd.merge(groupedH, groupedA, on='team', how='inner')
+teams
+
+```
+
+
+
+```{python team_plots}
+fig, ax = plt.subplots()
+
+y = np.arange(len(unq_teams))  # Team positions
+width = 0.4  # Bar width
+
+plt.barh(y - width/2, teams["home_win%"], width, label='Home Win %')
+plt.barh(y + width/2, teams["away_win%"], width, label='Away Win %')
+plt.yticks(y, unq_teams)
+
+# Add labels and title
+plt.ylabel('Teams')
+plt.xlabel('Home Win% and Away Win%')
+plt.title('Home and Away Win Percentage By Team')
+
+plt.legend()
+fig.tight_layout()
+plt.show()
+plt.close()
+```
 
 
 

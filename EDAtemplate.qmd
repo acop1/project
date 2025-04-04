@@ -30,19 +30,7 @@ Top teams by wins or points.
 
 Team Performance Win/Loss vs. Home/Away: Do teams perform better at home?
 
-Score Difference Analysis: How often do matches have close margins?
-
 Points Scored vs. Conceded: Defensive vs. offensive strength.
-
-Correlation Analysis:
-
-Does more possession lead to more points?
-
-Are more penalties associated with losses?
-
-#4. Time-Based Trends Seasonal Performance: Do teams perform better at certain times of the year?
-
-Team Improvement/Decline: Win rate trends over seasons.
 
 
 ```{python loading_packages}
@@ -97,7 +85,7 @@ We also notice that the home team won ~59.6%* o the games contested.
 
 *This does not account for games that take place in neutral venues.
 
-```{python}
+```{python win%}
 #create diff df by teams, then find the summary statistics for those teams.
 unq_hteams = rugbyDF['home_team'].unique()
 unq_ateams = rugbyDF['away_team'].unique()
@@ -125,21 +113,21 @@ groupedH = groupedH.rename(columns={'count': 'count_home'})
 groupedA = groupedA.rename(columns={'count': 'count_away'})
 
 #merge the data frames
-teams = pd.merge(groupedH, groupedA, on='team', how='inner')
-teams
+teams_wins = pd.merge(groupedH, groupedA, on='team', how='inner')
+teams_wins
 
 ```
 
 
 
-```{python team_plots}
+```{python team_win_plots}
 fig, ax = plt.subplots()
 
 y = np.arange(len(unq_teams))  # Team positions
-width = 0.4  # Bar width
+width = 0.37  # Bar width
 
-plt.barh(y - width/2, teams["home_win%"], width, label='Home Win %')
-plt.barh(y + width/2, teams["away_win%"], width, label='Away Win %')
+plt.barh(y - width/2, teams_wins["home_win%"], width, label='Home Win %')
+plt.barh(y + width/2, teams_wins["away_win%"], width, label='Away Win %')
 plt.yticks(y, unq_teams)
 
 # Add labels and title
@@ -153,10 +141,224 @@ plt.show()
 plt.close()
 ```
 
+Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing. 
 
 
+```{python team_scoring}
+#a function to create a scoring dataset
+def createscoringdataset(rugbyDF):
+  
+  #shortens the df to only include awayteam, awaywin or hometeam, homewin
+  rugbyDFH_score = rugbyDF[["home_team","home_score","away_score","count"]]
+  rugbyDFA_score = rugbyDF[["away_team","away_score","home_score","count"]]
+
+  #renaming away_score and home_score to home_conceded and away_conceded
+  rugbyDFH_score = rugbyDFH_score.rename(columns={'away_score': 'home_conceded'})
+  rugbyDFA_score = rugbyDFA_score.rename(columns={'home_score': 'away_conceded'})
+
+  #groups the data by team
+  groupedH_score = rugbyDFH_score.groupby('home_team').sum()
+  groupedA_score = rugbyDFA_score.groupby('away_team').sum()
+
+  #renames the axis to the same thing
+  groupedH_score = groupedH_score.rename_axis('team')
+  groupedA_score = groupedA_score.rename_axis('team')
+
+  #merge the data frames
+  teams_score = pd.merge(groupedH_score, groupedA_score, on='team', how='inner')
+
+  #rename count_x and count_y to home_played and away_played
+  teams_score = teams_score.rename(columns={'count_x': 'home_played', 'count_y': 'away_played'})
+
+  #find team win percentage by away and home 
+  teams_score["home_score_avg"] = teams_score["home_score"]/teams_score["home_played"]
+  teams_score["away_score_avg"] = teams_score["away_score"]/teams_score["away_played"]
+
+  teams_score["home_conceded_avg"] = teams_score["home_conceded"]/teams_score["home_played"]
+  teams_score["away_conceded_avg"] = teams_score["away_conceded"]/teams_score["away_played"]
+  return teams_score
+
+teams_score = createscoringdataset(rugbyDF)
+```
+
+```{python team_scoring_plots}
+
+# Create a 2x2 grid of subplots
+fig, axs = plt.subplots(2, 2, figsize=(16, 24))  # 2 rows, 2 columns
+
+# Plot 1: Home Win %
+axs[0, 0].barh(unq_teams, teams_wins["home_win%"], color='blue')
+axs[0, 0].set_title('Home Win Percentage')
+axs[0, 0].set_xlabel('Win %')
+
+# Plot 2: Away Win %
+axs[0, 1].barh(unq_teams, teams_wins["away_win%"], color='orange')
+axs[0, 1].set_title('Away Win Percentage')
+axs[0, 1].set_xlabel('Win %')
+
+# Plot 3: Home vs Away Comparison (side-by-side)
+y = range(len(unq_teams))
+width = 0.35
+axs[1, 0].barh([y - width/2 for y in y], teams_wins["home_win%"], width, label='Home', color='blue')
+axs[1, 0].barh([y + width/2 for y in y], teams_wins["away_win%"], width, label='Away', color='orange')
+axs[1, 0].set_title('Home vs Away Comparison')
+axs[1, 0].set_xlabel('Win %')
+axs[1, 0].set_yticks(y)
+axs[1, 0].set_yticklabels(unq_teams)
+axs[1, 0].legend()
+
+# Plot 4: Difference (Home - Away)
+axs[1, 1].barh(unq_teams, teams_wins["home_win%"] - teams_wins["away_win%"], color='green')
+axs[1, 1].set_title('Home Advantage (Home - Away)')
+axs[1, 1].set_xlabel('Win % Difference')
+
+plt.tight_layout(rect=[0.07, 0.09, 1, 0.89]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.4, hspace=0.6) 
+plt.show()
+plt.close()
+```
+```{python team_scoring_conceding_plots}
+# Create figure with 2x2 subplots
+fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+
+# --- Plot 1: Home vs Away Points Scored ---
+width = 0.35
+y = np.arange(len(unq_teams))
+axs[0].bar(y - width/2, teams_score['home_score_avg'], width, label='Home', color='#2ecc71')  # Green
+axs[0].bar(y + width/2, teams_score['away_score_avg'], width, label='Away', color='#e74c3c')  # Red
+axs[0].set_title('Average Points Scored per Match')
+axs[0].set_ylabel('Points')
+axs[0].set_xticks(y)
+axs[0].set_xticklabels(unq_teams, rotation=45, ha='right')
+axs[0].legend()
+
+# --- Plot 2: Home vs Away Points Conceded ---
+axs[1].bar(y - width/2, teams_score['home_conceded_avg'], width, label='Home', color='#2ecc71')
+axs[1].bar(y + width/2, teams_score['away_conceded_avg'], width, label='Away', color='#e74c3c')
+axs[1].set_title('Average Points Conceded per Match')
+axs[1].set_ylabel('Points')
+axs[1].set_xticks(y)
+axs[1].set_xticklabels(unq_teams, rotation=45, ha='right')
+axs[1].legend()
+
+# Adjust layout
+plt.tight_layout(rect=[0.04, 0.065, 1, 1]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.3, hspace=1.2) 
+plt.show()
+plt.close()
+```
+```{python worldcup_dataset}
+#creates world cup scoring df
+
+worldCupDF = rugbyDF[rugbyDF.world_cup == True]
+nonWorldCup = rugbyDF[rugbyDF.world_cup == False]
+wc_scoring = createscoringdataset(worldCupDF)
+non_wc_scoring = createscoringdataset(nonWorldCup)
+
+```
 
 
+```{python team_scoring_conceding_plots_worldcup}
+
+
+# Create figure with 2x2 subplots
+fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+
+# --- Plot 1: Home vs Away Points Scored ---
+width = 0.35
+y = np.arange(len(unq_teams))
+axs[0].bar(y - width/2, wc_scoring['home_score_avg'], width, label='Home', color='#2ecc71')  # Green
+axs[0].bar(y + width/2, wc_scoring['away_score_avg'], width, label='Away', color='#e74c3c')  # Red
+axs[0].set_title('Average Points Scored per World Cup Match')
+axs[0].set_ylabel('Points')
+axs[0].set_xticks(y)
+axs[0].set_xticklabels(unq_teams, rotation=45, ha='right')
+axs[0].legend()
+
+# --- Plot 2: Home vs Away Points Conceded ---
+axs[1].bar(y - width/2, wc_scoring['home_conceded_avg'], width, label='Home', color='#2ecc71')
+axs[1].bar(y + width/2, wc_scoring['away_conceded_avg'], width, label='Away', color='#e74c3c')
+axs[1].set_title('Average Points Conceded per World Cup Match')
+axs[1].set_ylabel('Points')
+axs[1].set_xticks(y)
+axs[1].set_xticklabels(unq_teams, rotation=45, ha='right')
+axs[1].legend()
+
+# Adjust layout
+plt.tight_layout(rect=[0.04, 0.065, 1, 1]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.3, hspace=1.2) 
+plt.show()
+plt.close()
+```
+
+
+```{python worldcup_vs_non-worldcup}
+
+# Create a 2x2 grid of subplots
+fig, axs = plt.subplots(2, 2, figsize=(16, 24))  # 2 rows, 2 columns
+
+# Plot 1: World Cup vs Non World Cup home-score-avg
+y = range(len(unq_teams))
+width = 0.35
+axs[1, 0].barh([y - width/2 for y in y], wc_scoring['home_score_avg'], width, label='World Cup', color='#D4AF37') 
+axs[1, 0].barh([y + width/2 for y in y], non_wc_scoring['home_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[1, 0].set_title('Home Points')
+axs[1, 0].set_xlabel('Avg Points')
+axs[1, 0].set_yticks(y)
+axs[1, 0].set_yticklabels(unq_teams)
+
+
+# Plot 2: World Cup vs Non World Cup away-score-avg
+axs[0, 1].barh([y - width/2 for y in y], wc_scoring['away_score_avg'], width, label='World Cup', color='#D4AF37') 
+axs[0, 1].barh([y + width/2 for y in y], non_wc_scoring['away_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[0, 1].set_title('Away Points ')
+axs[0, 1].set_xlabel('Avg Points')
+axs[0, 1].set_yticks(y)
+axs[0, 1].set_yticklabels(unq_teams)
+
+
+# Plot 3: World Cup vs Non World Cup home-conceded-avg
+axs[1, 1].barh([y - width/2 for y in y], wc_scoring['home_conceded_avg'], width, label='World Cup', color='#D4AF37') 
+axs[1, 1].barh([y + width/2 for y in y], non_wc_scoring['home_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[1, 1].set_title('Home Conceded ')
+axs[1, 1].set_xlabel('Avg Points Conceded')
+axs[1, 1].set_yticks(y)
+axs[1, 1].set_yticklabels(unq_teams)
+
+
+# Plot 4: World Cup vs Non World Cup away-conceded-avg
+axs[0, 0].barh([y - width/2 for y in y], wc_scoring['away_conceded_avg'], width, label='World Cup', color='#D4AF37') 
+axs[0, 0].barh([y + width/2 for y in y], non_wc_scoring['away_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[0, 0].set_title('Away Conceded ')
+axs[0, 0].set_xlabel('Avg Points Conceded')
+axs[0, 0].set_yticks(y)
+axs[0, 0].set_yticklabels(unq_teams)
+          
+# Create invisible artist in center
+fig.patches.extend([plt.Rectangle((0.5, 0.5), 0.01, 0.01, 
+                                alpha=0, zorder=100,
+                                transform=fig.transFigure)])
+
+# Create unified legend
+legend_elements = [
+    plt.Rectangle((0,0), 1, 1, fc='#D4AF37', ec='#B8860B', lw=1, label='WC'),
+    plt.Rectangle((0,0), 1, 1, fc='#A6A6A6', ec='#808080', lw=1, label='Non WC')
+]
+
+# Place legend in absolute center
+legend = fig.legend(handles=legend_elements,
+                   loc='center',
+                   bbox_to_anchor=(0.55, 0.495),  # Dead center
+                   bbox_transform=fig.transFigure,
+                   frameon=True,
+                   title='Match Type',
+                   borderaxespad=1)
+
+
+plt.tight_layout(rect=[0.07, 0.09, 1, 0.89]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.4, hspace=0.6) 
+plt.show()
+```
 
 
 

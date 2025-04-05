@@ -358,7 +358,83 @@ legend = fig.legend(handles=legend_elements,
 plt.tight_layout(rect=[0.07, 0.09, 1, 0.89]) # Adjusts spacing between subplots
 plt.subplots_adjust(wspace=0.4, hspace=0.6) 
 plt.show()
+plt.close()
 ```
+
+```{python year_wise_wins}
+#only kees the year, awayWin, homeWin, and country
+year_wise = rugbyDF[["home_team","away_team","homeWin","awayWin","count","year"]]
+
+#drops the away in homeDf and home in awayDf
+home_year_wise = year_wise.drop(columns={"away_team","awayWin"})
+away_year_wise = year_wise.drop(columns={"home_team","homeWin"})
+
+#renames so that both df have the same col names for concatenation
+home_year_wise = home_year_wise.rename(columns={"home_team":"team","homeWin":"win"})
+away_year_wise = away_year_wise.rename(columns={"away_team":"team","awayWin":"win"})
+year_wise = pd.concat([home_year_wise,away_year_wise], axis=0).reset_index(drop=True)
+
+#groups the data by year and by team and then cerates a win% col for normalized results
+def getGroupedYW(year_wise):
+  year_wise_grouped = year_wise.groupby(["team","year"]).sum()
+  year_wise_grouped["win_%"] = year_wise_grouped["win"].div(year_wise_grouped["count"])
+  year_wise_grouped = year_wise_grouped.drop(columns={"win","count"})
+  return year_wise_grouped
+
+year_wise_grouped = getGroupedYW(year_wise)
+```
+
+```{python year_wise_plot_function}
+def plotYearWiseData(year_wise_grouped):
+  year_wise_grouped_reset = year_wise_grouped.reset_index()
+
+  plt.figure(figsize=(10, 6))
+  sns.lineplot(data=year_wise_grouped_reset, x='year', y='win_%', hue='team', 
+             style='team', markers=True, dashes=False)
+
+  plt.title('Win Percentage by Team Over Years')
+  plt.xlabel('Year')
+  plt.ylabel('Win Percentage')
+  plt.legend(bbox_to_anchor=(1.001, 1), loc='upper left')
+  plt.grid(True)
+  plt.tight_layout(rect=[0.02, 0.04, 1, 0.95])
+  plt.show()
+  plt.close()
+
+plotYearWiseData(year_wise_grouped)
+```
+Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.
+
+```{python plot_split}
+# Split teams into two halves
+half_idx = len(unq_teams) // 2
+first_half_teams = unq_teams[:half_idx]
+second_half_teams = unq_teams[half_idx:]
+
+# Create filtered DataFrames
+df_first_half = year_wise[year_wise['team'].isin(first_half_teams)]
+df_second_half = year_wise[year_wise['team'].isin(second_half_teams)]
+
+#Checking if the teams do not overlap
+df_first_half["team"].unique()
+df_second_half["team"].unique()
+```
+```{python first_half_lot}
+#uses the function to create the grouped data
+first_half_grouped = getGroupedYW(df_first_half)
+
+#plots it
+plotYearWiseData(first_half_grouped)
+```
+
+```{python second_half_plot}
+#uses the function to create the grouped data
+second_half_grouped = getGroupedYW(df_second_half)
+
+#plots it
+plotYearWiseData(second_half_grouped)
+```
+
 
 
 

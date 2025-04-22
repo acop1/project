@@ -1,0 +1,191 @@
+Preliminary Analysis 
+
+---
+
+## **Introduction**
+
+The Rugby World Cup (RWC) is the most prestigious tournament in men’s international rugby, held every four years and featuring the top-performing nations from around the globe. Since its inception in 1987, all winning teams have come from the group of tier-one rugby nations—those with well-established professional structures and a history of competitive success. The World Cup's high stakes, unique pressure, and knockout format often produce different outcomes from regular international fixtures, yet the path to RWC success may still be written in a team’s performance leading up to the tournament.
+
+This project seeks to bridge our understanding of regular international performance with World Cup outcomes through a predictive modeling lens. Our guiding research question is:  
+> **Can regular fixture performance since 1999 reliably predict World Cup success for tier-one rugby nations?**
+
+We expect that teams with consistently high win rates, dominant scoring margins, and strong rankings (e.g., Elo ratings) leading into a World Cup are more likely to progress further or win the tournament. Based on our model, and consistent with historical trends, we predict that **South Africa (RSA)**, **Ireland (IRE)**, or **New Zealand (NZ)** are the most likely candidates to win the 2027 Rugby World Cup.
+
+---
+
+## **Data**
+
+### **Data Source and Collection**
+The data for this project was sourced from an international rugby match dataset containing results from test matches played by men's national teams. The dataset includes **2,783 matches**, of which **1,230** were retained after filtering for:
+- Matches played **between 1999 and 2024**, inclusive
+- **Tier-one teams** only
+- Complete match records (with no missing scores or team names)
+
+### **Cases and Variables**
+Each row in the dataset represents a single international rugby match and includes variables such as:
+- `date`: Match date
+- `home_team`, `away_team`: Competing teams
+- `home_score`, `away_score`: Points scored by each team
+- `competition`: Type of match (e.g., World Cup, Six Nations, etc.)
+- `neutral`: Boolean indicator for neutral venue
+- `world_cup`: Boolean indicator for whether the match is a World Cup fixture
+
+### **Data Wrangling and Feature Engineering**
+To support our analysis, we created several new variables and tidied the dataset:
+- Extracted `year` from the match date for time-series analysis
+- Created binary indicators: `homeWin` and `awayWin`
+- Calculated `count` to aid in aggregating match totals
+- Grouped matches by team to calculate:
+  - **Home and away win percentages**
+  - **Average points scored and conceded (home and away)**
+  - **World Cup vs. regular fixture performance**
+- Developed year-by-year win percentage timelines for each team
+
+### **Variables for Modeling**
+We plan to include the following variables in our predictive models:
+- **Win Percentage (last 2 years before RWC)**: Measures recent performance
+- **Average Point Differential**: Offensive and defensive strength indicator
+- **Elo Rating** (if included or computed): Captures opponent-adjusted team strength
+- **Tournament Flag**: Helps compare regular matches to World Cup fixtures
+- **Home/Away Advantage**: Quantified through win rates and score differentials
+
+These variables were chosen for their interpretability and demonstrated relevance in differentiating strong and weak tournament performers.
+
+---
+
+## **Methodology**
+
+### **Research Question**
+Our goal is to explore whether consistent performance in international fixtures since 1999 can predict a team’s success at the Rugby World Cup (RWC). We focus on tier-one nations, and based on trends in both regular and tournament data, we aim to forecast the winner of the 2027 RWC. Our preliminary model predicts that **South Africa, Ireland, or New Zealand** are the most likely champions.
+
+---
+
+### **Data Overview and Cleaning**
+
+We used a dataset containing **2,783 international matches**, which was filtered to:
+- **Matches after 1998**, yielding **1,230 matches**.
+- **Tier-one teams only**, excluding matches with insufficient data or unclear team tier.
+
+Cleaning Steps:
+- Extracted **year** from match dates for temporal analysis.
+- Created binary flags for **homeWin** and **awayWin**.
+- Dropped rows with missing values.
+- Created a **"count"** variable to aggregate matches played per team.
+
+---
+
+### **Feature Engineering and Wrangling**
+
+We created several new variables from existing match data:
+- **Home/Away Win Percentages**: Calculated by aggregating match results per team.
+- **Average Points Scored and Conceded**: For both World Cup and non-World Cup matches.
+- **World Cup Match Flag**: To compare regular vs. tournament performance.
+- **Yearly Win Percentage**: A normalized view of performance over time per team.
+
+> Code implementation used pandas and NumPy, with seaborn and matplotlib for plotting.
+
+---
+
+### **Exclusions**
+We excluded:
+- All matches involving **non-tier-one nations**.
+- Matches with **missing scores** or unclear venues.
+- Non-competitive matches that could skew performance metrics (e.g., experimental squads).
+
+---
+
+### **Summary Statistics**
+
+| Variable            | Mean   | Std Dev | Min   | Max   |
+|---------------------|--------|---------|-------|-------|
+| Home Score          | 25.07  | 13.15   | 0     | 101   |
+| Away Score          | 20.78  | 11.38   | 0     | 68    |
+| Home Win Rate       | 59.6%  | —       | 0     | 1     |
+| Away Win Rate       | 38.4%  | —       | 0     | 1     |
+| Year                | 2011.5 | 7.2     | 1999  | 2024  |
+
+**Observation**:  
+On average, the **home team outperforms the away team by ~4.3 points**. The home win rate is significantly higher across all teams.
+
+---
+
+### **Key Visualizations**
+
+**1. Home and Away Win Rates by Team**
+<img src="data:image/png;base64,[image_placeholder]" alt="Win Rate Plot" />
+
+- New Zealand dominates both at home and away.
+- All teams perform **better at home**, confirming home advantage.
+- Italy underperforms consistently.
+
+**2. Average Points Scored vs. Conceded**
+- Teams like **New Zealand** and **South Africa** show high scores with low concession.
+- **Italy** and **Scotland** concede more than they score, especially in away games.
+
+**3. World Cup vs. Regular Match Comparison**
+- **Ireland and South Africa** maintain strong performance in both contexts.
+- Some teams **drop significantly in performance during World Cups**, revealing tournament pressure or lack of depth.
+
+**4. Year-wise Win Percentage Trends**
+- Shows **consistency and peaks** for contenders like **NZ, RSA, and IRE**.
+- Allows modeling team form trajectory over time.
+
+---
+
+### **Modeling Approach**
+
+#### **Ordinal Logistic Regression**
+- Predicts **World Cup stage reached** (Group → QF → SF → Final → Winner).
+- Fits ordinal nature of outcomes and highlights incremental performance gains.
+
+```{python}
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.miscmodels.ordinal_model import OrderedModel
+
+# Example DataFrame structure
+# Make sure your dataset includes these columns
+# stage: 1=Group, 2=QF, 3=SF, 4=Final, 5=Winner (ordinal target)
+# win_pct, avg_point_diff, elo_rating, etc. are explanatory variables
+
+# Load your cleaned dataset (replace with actual file or DataFrame)
+df = pd.read_csv("your_rwc_model_data.csv")
+
+# Drop any rows with missing values (if needed)
+df.dropna(subset=['stage', 'win_pct', 'avg_point_diff', 'elo_rating'], inplace=True)
+
+# Define features and outcome variable
+X = df[['win_pct', 'avg_point_diff', 'elo_rating']]  # Add other variables if needed
+y = df['stage']  # Ordinal outcome
+
+# Create the ordinal logistic regression model
+model = OrderedModel(
+    endog=y,
+    exog=X,
+    distr='logit'  # You could also try 'probit'
+)
+
+# Fit the model
+res = model.fit(method='bfgs')
+print(res.summary())
+
+```
+
+#### **Random Forest Classifier**
+- Used for **binary classification**: World Cup Winner vs. Non-Winner.
+- Captures **non-linear patterns** and **interaction effects**.
+- Feature importance helps identify key performance indicators.
+
+#### **Time-Series Analysis**
+- Year-wise win percentage trends inform about **form, slumps, and growth**.
+- Useful for **pre-tournament prediction**, especially for 2027.
+
+---
+
+### **Why These Methods?**
+- **Logistic regression** works well with ordered categories.
+- **Random forests** are robust to outliers and handle complex variable relationships.
+- **Visualization-backed wrangling** ensured each model was driven by interpretable and meaningful variables.
+
+---

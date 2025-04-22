@@ -1,6 +1,6 @@
 ---
 title: "template"
-format: html
+format: pdf
 editor: visual
 ---
 
@@ -32,7 +32,6 @@ Team Performance Win/Loss vs. Home/Away: Do teams perform better at home?
 
 Points Scored vs. Conceded: Defensive vs. offensive strength.
 
-
 ```{python loading_packages}
 import pandas as pd
 import numpy as np
@@ -58,6 +57,7 @@ rugbyDF.dropna(inplace = True)
 rugbyDF.shape
 #new shape of dataframe: (1230,12)
 ```
+
 ```{python create_homeWin}
 #creating variable to track if home or away team won
 #created weights for win, draw, and loss
@@ -81,9 +81,9 @@ rugbyDF.describe()
 
 We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.
 
-We also notice that the home team won ~59.6%* o the games contested. 
+We also notice that the home team won \~59.6%\* o the games contested.
 
-*This does not account for games that take place in neutral venues.
+\*This does not account for games that take place in neutral venues.
 
 ```{python win%}
 #create diff df by teams, then find the summary statistics for those teams.
@@ -118,8 +118,6 @@ teams_wins
 
 ```
 
-
-
 ```{python team_win_plots}
 fig, ax = plt.subplots()
 
@@ -141,8 +139,7 @@ plt.show()
 plt.close()
 ```
 
-Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing. 
-
+Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing.
 
 ```{python team_scoring}
 #a function to create a scoring dataset
@@ -217,6 +214,7 @@ plt.subplots_adjust(wspace=0.4, hspace=0.6)
 plt.show()
 plt.close()
 ```
+
 ```{python team_scoring_conceding_plots}
 # Create figure with 2x2 subplots
 fig, axs = plt.subplots(2, 1, figsize=(10, 8))
@@ -247,6 +245,7 @@ plt.subplots_adjust(wspace=0.3, hspace=1.2)
 plt.show()
 plt.close()
 ```
+
 ```{python worldcup_dataset}
 #creates world cup scoring df
 
@@ -256,7 +255,6 @@ wc_scoring = createscoringdataset(worldCupDF)
 non_wc_scoring = createscoringdataset(nonWorldCup)
 
 ```
-
 
 ```{python team_scoring_conceding_plots_worldcup}
 
@@ -290,7 +288,6 @@ plt.subplots_adjust(wspace=0.3, hspace=1.2)
 plt.show()
 plt.close()
 ```
-
 
 ```{python worldcup_vs_non-worldcup}
 
@@ -403,6 +400,7 @@ def plotYearWiseData(year_wise_grouped):
 
 plotYearWiseData(year_wise_grouped)
 ```
+
 Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.
 
 ```{python plot_split}
@@ -419,6 +417,7 @@ df_second_half = year_wise[year_wise['team'].isin(second_half_teams)]
 df_first_half["team"].unique()
 df_second_half["team"].unique()
 ```
+
 ```{python first_half_lot}
 #uses the function to create the grouped data
 first_half_grouped = getGroupedYW(df_first_half)
@@ -434,10 +433,3 @@ second_half_grouped = getGroupedYW(df_second_half)
 #plots it
 plotYearWiseData(second_half_grouped)
 ```
-
-
-
-
-
-
-

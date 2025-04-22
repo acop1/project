@@ -134,10 +134,217 @@ On average, the **home team outperforms the away team by ~4.3 points**. The home
 
 ### **Modeling Approach**
 
+#### **Random Forest Classifier**
+- Used for **binary classification**: World Cup Winner vs. Non-Winner.
+- Captures **non-linear patterns** and **interaction effects**.
+- Feature importance helps identify key performance indicators.
+
+#### **Time-Series Analysis**
+- Year-wise win percentage trends inform about **form, slumps, and growth**.
+- Useful for **pre-tournament prediction**, especially for 2027.
+
+---
+
+### **Why These Methods?**
+- **Logistic regression** works well with ordered categories.
+- **Random forests** are robust to outliers and handle complex variable relationships.
+- **Visualization-backed wrangling** ensured each model was driven by interpretable and meaningful variables.
+
+---
+
+#### **XGBoost CLassifier with Monte Carlo Simulations**
+
+```{python model-prediction}
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score
+import xgboost as xgb
+from collections import defaultdict
+import random
+
+# Load the dataset
+df = pd.read_csv('data/rugby.csv')
+
+# Data preprocessing
+# Filter to only international matches (remove club matches)
+international_matches = df['competition'].str.contains('International|Championship|Nations|World Cup|Test Match')
+df = df.loc[international_matches].copy()
+
+# Feature engineering
+# Create target variable - winner of each match
+conditions = [
+    df['home_score'] > df['away_score'],
+    df['home_score'] < df['away_score']
+]
+choices = [df['home_team'], df['away_team']]
+df.loc[:, 'winner'] = np.select(conditions, choices, default='Draw')
+
+# Remove draws for classification
+df = df.loc[df['winner'] != 'Draw'].copy()
+
+# Encode categorical variables
+le = LabelEncoder()
+df.loc[:, 'home_team_encoded'] = le.fit_transform(df['home_team'])
+df.loc[:, 'away_team_encoded'] = le.transform(df['away_team'])
+df.loc[:, 'winner_encoded'] = le.transform(df['winner'])
+
+# Create features based on historical performance
+def calculate_team_stats(df):
+    team_stats = defaultdict(lambda: {'games': 0, 'wins': 0, 'points_for': 0, 'points_against': 0})
+    
+    for _, row in df.iterrows():
+        home_team = row['home_team']
+        away_team = row['away_team']
+        home_score = row['home_score']
+        away_score = row['away_score']
+        
+        # Update home team stats
+        team_stats[home_team]['games'] += 1
+        team_stats[home_team]['points_for'] += home_score
+        team_stats[home_team]['points_against'] += away_score
+        team_stats[home_team]['wins'] += 1 if home_score > away_score else 0
+        
+        # Update away team stats
+        team_stats[away_team]['games'] += 1
+        team_stats[away_team]['points_for'] += away_score
+        team_stats[away_team]['points_against'] += home_score
+        team_stats[away_team]['wins'] += 1 if away_score > home_score else 0
+    
+    return team_stats
+
+# Calculate rolling stats
+team_stats = calculate_team_stats(df)
+
+# Add features to dataframe
+def add_features(df, team_stats):
+    df = df.copy()
+    df.loc[:, 'home_win_pct'] = df['home_team'].apply(
+        lambda x: team_stats[x]['wins'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0.5)
+    df.loc[:, 'away_win_pct'] = df['away_team'].apply(
+        lambda x: team_stats[x]['wins'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0.5)
+    df.loc[:, 'home_points_avg'] = df['home_team'].apply(
+        lambda x: team_stats[x]['points_for'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0)
+    df.loc[:, 'away_points_avg'] = df['away_team'].apply(
+        lambda x: team_stats[x]['points_for'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0)
+    df.loc[:, 'home_points_against_avg'] = df['home_team'].apply(
+        lambda x: team_stats[x]['points_against'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0)
+    df.loc[:, 'away_points_against_avg'] = df['away_team'].apply(
+        lambda x: team_stats[x]['points_against'] / team_stats[x]['games'] if team_stats[x]['games'] > 0 else 0)
+    
+    # Add some interaction features
+    df.loc[:, 'win_pct_diff'] = df['home_win_pct'] - df['away_win_pct']
+    df.loc[:, 'points_diff'] = df['home_points_avg'] - df['away_points_avg']
+    
+    return df
+
+df = add_features(df, team_stats)
+
+# Split into features and target
+feature_cols = ['home_team_encoded', 'away_team_encoded', 
+                'home_win_pct', 'away_win_pct', 
+                'home_points_avg', 'away_points_avg',
+                'home_points_against_avg', 'away_points_against_avg',
+                'win_pct_diff', 'points_diff']
+X = df.loc[:, feature_cols]
+y = df.loc[:, 'winner_encoded']
+
+# Split into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train XGBoost model
+model = xgb.XGBClassifier(
+    objective='multi:softprob',
+    num_class=len(le.classes_),
+    n_estimators=100,
+    max_depth=5,
+    learning_rate=0.1,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+# Evaluate model
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Model accuracy: {accuracy:.2f}")
+
+# Monte Carlo simulation for World Cup prediction
+def simulate_world_cup(teams, model, le, n_simulations=1000):
+    # Get current top teams (from our dataset)
+    top_teams = ['New Zealand', 'South Africa', 'Australia', 'England', 'France', 
+                 'Ireland', 'Wales', 'Scotland', 'Argentina', 'Italy']
+    
+    # Create a dictionary to store win counts
+    win_counts = {team: 0 for team in top_teams}
+    
+    for _ in range(n_simulations):
+        # Randomly select 2 teams to "play" in the final
+        finalists = random.sample(top_teams, 2)
+        team1, team2 = finalists
+        
+        # Create feature vector for this matchup
+        try:
+            team1_encoded = le.transform([team1])[0]
+            team2_encoded = le.transform([team2])[0]
+        except ValueError:
+            # Skip if team not in our training data
+            continue
+            
+        # Get team stats (simplified - in practice you'd want more recent stats)
+        team1_stats = team_stats.get(team1, {'games': 1, 'wins': 0, 'points_for': 0, 'points_against': 0})
+        team2_stats = team_stats.get(team2, {'games': 1, 'wins': 0, 'points_for': 0, 'points_against': 0})
+        
+        # Create feature row
+        features = np.array([
+            team1_encoded, team2_encoded,
+            team1_stats['wins'] / max(1, team1_stats['games']),
+            team2_stats['wins'] / max(1, team2_stats['games']),
+            team1_stats['points_for'] / max(1, team1_stats['games']),
+            team2_stats['points_for'] / max(1, team2_stats['games']),
+            team1_stats['points_against'] / max(1, team1_stats['games']),
+            team2_stats['points_against'] / max(1, team2_stats['games']),
+            (team1_stats['wins'] / max(1, team1_stats['games'])) - 
+            (team2_stats['wins'] / max(1, team2_stats['games'])),
+            (team1_stats['points_for'] / max(1, team1_stats['games'])) - 
+            (team2_stats['points_for'] / max(1, team2_stats['games']))
+        ]).reshape(1, -1)
+        
+        # Predict probabilities
+        try:
+            probs = model.predict_proba(features)[0]
+            
+            # Sample winner based on probabilities
+            winner_idx = np.random.choice(len(probs), p=probs)
+            winner = le.inverse_transform([winner_idx])[0]
+            
+            if winner in win_counts:
+                win_counts[winner] += 1
+        except:
+            continue
+    
+    # Convert counts to percentages
+    total = max(1, sum(win_counts.values()))
+    win_pct = {team: (count / total) * 100 for team, count in win_counts.items()}
+    
+    return win_pct
+
+# Run simulation
+win_probabilities = simulate_world_cup(le.classes_, model, le, n_simulations=10000)
+
+# Display results
+print("\nPredicted 2027 Rugby World Cup Win Probabilities:")
+for team, prob in sorted(win_probabilities.items(), key=lambda x: x[1], reverse=True):
+    if prob > 0:
+        print(f"{team}: {prob:.1f}%")
+```        
+
 #### **Ordinal Logistic Regression**
 - Predicts **World Cup stage reached** (Group → QF → SF → Final → Winner).
 - Fits ordinal nature of outcomes and highlights incremental performance gains.
 
+Create a worldcup dataset that has each teams outcome for that world cup, elo rating, avg_point_diff, and win_pct for that year.
 ```{python}
 import pandas as pd
 import numpy as np
@@ -171,21 +378,3 @@ res = model.fit(method='bfgs')
 print(res.summary())
 
 ```
-
-#### **Random Forest Classifier**
-- Used for **binary classification**: World Cup Winner vs. Non-Winner.
-- Captures **non-linear patterns** and **interaction effects**.
-- Feature importance helps identify key performance indicators.
-
-#### **Time-Series Analysis**
-- Year-wise win percentage trends inform about **form, slumps, and growth**.
-- Useful for **pre-tournament prediction**, especially for 2027.
-
----
-
-### **Why These Methods?**
-- **Logistic regression** works well with ordered categories.
-- **Random forests** are robust to outliers and handle complex variable relationships.
-- **Visualization-backed wrangling** ensured each model was driven by interpretable and meaningful variables.
-
----

@@ -241,6 +241,10 @@ def add_features(df, team_stats):
 
 df = add_features(df, team_stats)
 
+```
+
+```{python train-test-xgboost}
+
 # Split into features and target
 feature_cols = ['home_team_encoded', 'away_team_encoded', 
                 'home_win_pct', 'away_win_pct', 
@@ -269,6 +273,10 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Model accuracy: {accuracy:.2f}")
+
+```
+
+```{python monte-carlo-xgboost}
 
 # Monte Carlo simulation for World Cup prediction
 def simulate_world_cup(teams, model, le, n_simulations=1000):
@@ -331,7 +339,7 @@ def simulate_world_cup(teams, model, le, n_simulations=1000):
     return win_pct
 
 # Run simulation
-win_probabilities = simulate_world_cup(le.classes_, model, le, n_simulations=10000)
+win_probabilities = simulate_world_cup(le.classes_, model, le, n_simulations=100000)
 
 # Display results
 print("\nPredicted 2027 Rugby World Cup Win Probabilities:")

@@ -1,44 +1,87 @@
----
-title: "template"
-format: pdf
-editor: visual
----
+Exploring the Data:
 
-#1. Data Overview Dataset Structure: Check rows, columns, and data types.
+1.  Outcome Variable: The outcome variable is predicting the country that will win the 2027 Rugby World Cup. This is measured using historical match data, including win percentages, points scored, and points conceded for each team. The data provides a strong foundation for understanding team performance over time, but it may not fully account for future changes in team dynamics, player injuries, or other unforeseen factors. The analysis aligns with expectations by highlighting New Zealand as the historically dominant team, but it also reveals trends for other competitive teams like South Africa and Ireland.
 
-Missing Values: Identify and handle missing data.
+Important to note that all statistics shown here are amongst games contested between the 10 tier 1 rugby teams.
 
-Basic Statistics: Summary stats (mean, median, min, max, etc.) for numerical variables.
+2.  Key Explanatory Variables:
 
-Key Variables to Examine (Depending on Dataset) Match Data: Date, teams, score, venue, competition.
+-\> Win Percentages (Home/Away): Measures team performance based on location.
 
-Team Data: Win/loss records, points scored/conceded, penalties.
+-\> Average Points Scored/Conceded: Reflects offensive and defensive capabilities.
 
-#2. Univariate Analysis Analyze individual variables to understand distributions.
+-\> World Cup vs. Non-World Cup Performance: Differentiates performance in high-stakes tournaments.
 
-Numerical Variables Distribution Plots: Histograms, boxplots (e.g., points scored, tackles made).
+-\> Yearly Trends: Tracks team performance over time to identify improvements or declines.
 
-Key Metrics: Average points per match.
+3.  Summary Statistics: Below is a summary of key variables from the dataset (after filtering for post-1999 data):
 
-Categorical Variables Bar Charts:
+| Variable   | Count | Mean    | Std   | Min  | 25%  | 50%  | 75%  | Max  |
+|------------|-------|---------|-------|------|------|------|------|------|
+| home_score | 1230  | 25.07   | 13.15 | 0    | 16   | 23   | 32   | 101  |
+| away_score | 1230  | 20.78   | 11.38 | 0    | 13   | 19   | 27   | 68   |
+| homeWin    | 1230  | 0.60    | 0.49  | 0    | 0    | 1    | 1    | 1    |
+| awayWin    | 1230  | 0.38    | 0.49  | 0    | 0    | 0    | 1    | 1    |
+| year       | 1230  | 2011.50 | 7.19  | 1999 | 2006 | 2012 | 2018 | 2024 |
 
-Most frequent match outcomes (win/loss/draw).
+Data Wrangling and Transformation 1. Data Cleaning:
 
-Top teams by wins or points.
+-\> Removed matches before 1999 to focus on recent performance.
 
-#3. Bivariate & Multivariate Analysis Examine relationships between variables.
+-\> Dropped rows with missing values to ensure data integrity.
 
-Team Performance Win/Loss vs. Home/Away: Do teams perform better at home?
+2.  Data Wrangling:
 
-Points Scored vs. Conceded: Defensive vs. offensive strength.
+-\> Created a year column by extracting the year from the date column.
+
+-\> Added binary variables homeWin and awayWin to track match outcomes.
+
+-\> Aggregated data by team to calculate win percentages and average points scored/conceded.
+
+3.  Excluded Observations:
+
+-\> Excluded matches before 1999 to focus on modern rugby dynamics.
+
+-\> Dropped rows with missing values (though none were present after filtering).
+
+4.  New Variables:
+
+-\> homeWin/awayWin: Binary indicators for match outcomes.
+
+-\> home_win%/away_win%: Team-specific win rates.
+
+-\> home_score_avg/away_score_avg: Average points scored per match.
+
+-\> home_conceded_avg/away_conceded_avg: Average points conceded per match.
+
+These transformations were done to quantify team performance and home/away advantages, which are critical for predicting World Cup success.
+
+Codebook for EDA
+
+| Variable | Type | Description |
+|----|----|----|
+| year | Integer | Extracted from date to filter matches post-1999. |
+| homeWin | Binary (0/1) | Indicates if the home team won (1) or not (0). |
+| awayWin | Binary (0/1) | Indicates if the away team won (1) or not (0). |
+| count | Integer | Dummy variable for counting matches (always 1). Used for aggregations. |
+| home_win% | Float | Home win percentage for each team. |
+| away_win% | Float | Away win percentage for each team. |
+| home_score_avg | Float | Average points scored by a team at home. |
+| away_score_avg | Float | Average points scored by a team away. |
+| home_conceded_avg | Float | Average points conceded by a team at home. |
+| away_conceded_avg | Float | Average points conceded by a team away. |
+| win\_% (yearly) | Float | Yearly win percentage for each team. |
+
+Importing python packages
 
 ```{python loading_packages}
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 ```
+
+Importing rugby data and finding the shape
 
 ```{python import_data}
 rugbyDF = pd.read_csv("data/rugby.csv")
@@ -81,7 +124,7 @@ rugbyDF.describe()
 
 We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.
 
-We also notice that the home team won \~59.6%\* o the games contested.
+We also notice that the home team won \~59.6%\* of the games contested.
 
 \*This does not account for games that take place in neutral venues.
 
@@ -105,8 +148,8 @@ groupedA = groupedA.rename_axis('team')
 groupedH = groupedH.rename_axis('team')
 
 #find team win percentage by away and home 
-groupedH["home_win%"] = groupedH["homeWin"]/groupedH["count"]
-groupedA["away_win%"] = groupedA["awayWin"]/groupedA["count"]
+groupedH["home_win%"] = groupedH["homeWin"]/groupedH["count"] *100
+groupedA["away_win%"] = groupedA["awayWin"]/groupedA["count"] *100
 
 #renames count so that they dont clash when merging
 groupedH = groupedH.rename(columns={'count': 'count_home'})
@@ -117,6 +160,8 @@ teams_wins = pd.merge(groupedH, groupedA, on='team', how='inner')
 teams_wins
 
 ```
+
+This data frame represents the team wise performance breakdown from 1999-2024.
 
 ```{python team_win_plots}
 fig, ax = plt.subplots()
@@ -139,7 +184,7 @@ plt.show()
 plt.close()
 ```
 
-Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing.
+Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing, hwich makes you question how they became a tier 1 nation.
 
 ```{python team_scoring}
 #a function to create a scoring dataset
@@ -181,7 +226,13 @@ teams_score = createscoringdataset(rugbyDF)
 ```{python team_scoring_plots}
 
 # Create a 2x2 grid of subplots
-fig, axs = plt.subplots(2, 2, figsize=(16, 24))  # 2 rows, 2 columns
+fig, axs = plt.subplots(2, 2)  # 2 rows, 2 columns
+
+# Add main title
+fig.suptitle("Teamwise Home vs Away Performance", 
+             fontsize=16, 
+             y=1.02,          # Adjust vertical position (1.0 = top of plot)
+             fontweight='bold')
 
 # Plot 1: Home Win %
 axs[0, 0].barh(unq_teams, teams_wins["home_win%"], color='blue')
@@ -209,15 +260,23 @@ axs[1, 1].barh(unq_teams, teams_wins["home_win%"] - teams_wins["away_win%"], col
 axs[1, 1].set_title('Home Advantage (Home - Away)')
 axs[1, 1].set_xlabel('Win % Difference')
 
-plt.tight_layout(rect=[0.07, 0.09, 1, 0.89]) # Adjusts spacing between subplots
-plt.subplots_adjust(wspace=0.4, hspace=0.6) 
+plt.tight_layout(rect=[0.00, 0.0, 1, 1]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.7, hspace=0.6) 
 plt.show()
 plt.close()
 ```
 
+This is a more detailed plot from the one above this. It also includes a direct comparison of a teams home advantage. Here it is the difference between their home win% and away win%. We can notice that RSA, IRE, ENG, and AUS are countries that really enjoy playing at home.
+
 ```{python team_scoring_conceding_plots}
 # Create figure with 2x2 subplots
-fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+fig, axs = plt.subplots(2, 1)
+
+# Add main title
+fig.suptitle("Teamwise Offense vs Defense", 
+             fontsize=16, 
+             y=1.02,          # Adjust vertical position (1.0 = top of plot)
+             fontweight='bold')
 
 # --- Plot 1: Home vs Away Points Scored ---
 width = 0.35
@@ -246,6 +305,8 @@ plt.show()
 plt.close()
 ```
 
+This plot shows teams scoring breakdown home vs away. It gives us an insight into a teams offense and defense over the 25 year time period. Interestingly, Argentina seems to be the only country where their defense is actually more impressive away from home when compared to at home. We notice that their average points conceded away from home is slightly less than when they play at home.
+
 ```{python worldcup_dataset}
 #creates world cup scoring df
 
@@ -256,80 +317,53 @@ non_wc_scoring = createscoringdataset(nonWorldCup)
 
 ```
 
-```{python team_scoring_conceding_plots_worldcup}
-
-
-# Create figure with 2x2 subplots
-fig, axs = plt.subplots(2, 1, figsize=(10, 8))
-
-# --- Plot 1: Home vs Away Points Scored ---
-width = 0.35
-y = np.arange(len(unq_teams))
-axs[0].bar(y - width/2, wc_scoring['home_score_avg'], width, label='Home', color='#2ecc71')  # Green
-axs[0].bar(y + width/2, wc_scoring['away_score_avg'], width, label='Away', color='#e74c3c')  # Red
-axs[0].set_title('Average Points Scored per World Cup Match')
-axs[0].set_ylabel('Points')
-axs[0].set_xticks(y)
-axs[0].set_xticklabels(unq_teams, rotation=45, ha='right')
-axs[0].legend()
-
-# --- Plot 2: Home vs Away Points Conceded ---
-axs[1].bar(y - width/2, wc_scoring['home_conceded_avg'], width, label='Home', color='#2ecc71')
-axs[1].bar(y + width/2, wc_scoring['away_conceded_avg'], width, label='Away', color='#e74c3c')
-axs[1].set_title('Average Points Conceded per World Cup Match')
-axs[1].set_ylabel('Points')
-axs[1].set_xticks(y)
-axs[1].set_xticklabels(unq_teams, rotation=45, ha='right')
-axs[1].legend()
-
-# Adjust layout
-plt.tight_layout(rect=[0.04, 0.065, 1, 1]) # Adjusts spacing between subplots
-plt.subplots_adjust(wspace=0.3, hspace=1.2) 
-plt.show()
-plt.close()
-```
-
 ```{python worldcup_vs_non-worldcup}
 
 # Create a 2x2 grid of subplots
-fig, axs = plt.subplots(2, 2, figsize=(16, 24))  # 2 rows, 2 columns
+fig, axs = plt.subplots(2, 2)  # 2 rows, 2 columns
+
+# Add main title
+fig.suptitle("World Cup vs Non World Cup Offense and Defense", 
+             fontsize=16, 
+             y=1.02,          # Adjust vertical position (1.0 = top of plot)
+             fontweight='bold')
 
 # Plot 1: World Cup vs Non World Cup home-score-avg
 y = range(len(unq_teams))
 width = 0.35
-axs[1, 0].barh([y - width/2 for y in y], wc_scoring['home_score_avg'], width, label='World Cup', color='#D4AF37') 
-axs[1, 0].barh([y + width/2 for y in y], non_wc_scoring['home_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
-axs[1, 0].set_title('Home Points')
+axs[0, 0].barh([y - width/2 for y in y], wc_scoring['home_score_avg'], width, label='World Cup', color='#D4AF37') 
+axs[0, 0].barh([y + width/2 for y in y], non_wc_scoring['home_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[0, 0].set_title('Home Points')
+axs[0, 0].set_xlabel('Avg Points')
+axs[0, 0].set_yticks(y)
+axs[0, 0].set_yticklabels(unq_teams)
+
+
+# Plot 2: World Cup vs Non World Cup away-score-avg
+axs[1, 0].barh([y - width/2 for y in y], wc_scoring['away_score_avg'], width, label='World Cup', color='#D4AF37') 
+axs[1, 0].barh([y + width/2 for y in y], non_wc_scoring['away_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[1, 0].set_title('Away Points ')
 axs[1, 0].set_xlabel('Avg Points')
 axs[1, 0].set_yticks(y)
 axs[1, 0].set_yticklabels(unq_teams)
 
 
-# Plot 2: World Cup vs Non World Cup away-score-avg
-axs[0, 1].barh([y - width/2 for y in y], wc_scoring['away_score_avg'], width, label='World Cup', color='#D4AF37') 
-axs[0, 1].barh([y + width/2 for y in y], non_wc_scoring['away_score_avg'], width, label='Non World Cup', color='#A6A6A6')  
-axs[0, 1].set_title('Away Points ')
+# Plot 3: World Cup vs Non World Cup home-conceded-avg
+axs[0, 1].barh([y - width/2 for y in y], wc_scoring['home_conceded_avg'], width, label='World Cup', color='#D4AF37') 
+axs[0, 1].barh([y + width/2 for y in y], non_wc_scoring['home_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[0, 1].set_title('Home Conceded ')
 axs[0, 1].set_xlabel('Avg Points')
 axs[0, 1].set_yticks(y)
 axs[0, 1].set_yticklabels(unq_teams)
 
 
-# Plot 3: World Cup vs Non World Cup home-conceded-avg
-axs[1, 1].barh([y - width/2 for y in y], wc_scoring['home_conceded_avg'], width, label='World Cup', color='#D4AF37') 
-axs[1, 1].barh([y + width/2 for y in y], non_wc_scoring['home_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
-axs[1, 1].set_title('Home Conceded ')
-axs[1, 1].set_xlabel('Avg Points Conceded')
+# Plot 4: World Cup vs Non World Cup away-conceded-avg
+axs[1, 1].barh([y - width/2 for y in y], wc_scoring['away_conceded_avg'], width, label='World Cup', color='#D4AF37') 
+axs[1, 1].barh([y + width/2 for y in y], non_wc_scoring['away_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
+axs[1, 1].set_title('Away Conceded ')
+axs[1, 1].set_xlabel('Avg Points')
 axs[1, 1].set_yticks(y)
 axs[1, 1].set_yticklabels(unq_teams)
-
-
-# Plot 4: World Cup vs Non World Cup away-conceded-avg
-axs[0, 0].barh([y - width/2 for y in y], wc_scoring['away_conceded_avg'], width, label='World Cup', color='#D4AF37') 
-axs[0, 0].barh([y + width/2 for y in y], non_wc_scoring['away_conceded_avg'], width, label='Non World Cup', color='#A6A6A6')  
-axs[0, 0].set_title('Away Conceded ')
-axs[0, 0].set_xlabel('Avg Points Conceded')
-axs[0, 0].set_yticks(y)
-axs[0, 0].set_yticklabels(unq_teams)
           
 # Create invisible artist in center
 fig.patches.extend([plt.Rectangle((0.5, 0.5), 0.01, 0.01, 
@@ -345,18 +379,19 @@ legend_elements = [
 # Place legend in absolute center
 legend = fig.legend(handles=legend_elements,
                    loc='center',
-                   bbox_to_anchor=(0.55, 0.495),  # Dead center
+                   bbox_to_anchor=(0.60, 0.49),  # Dead center
                    bbox_transform=fig.transFigure,
                    frameon=True,
                    title='Match Type',
                    borderaxespad=1)
 
-
-plt.tight_layout(rect=[0.07, 0.09, 1, 0.89]) # Adjusts spacing between subplots
-plt.subplots_adjust(wspace=0.4, hspace=0.6) 
+plt.tight_layout(rect=[0.07, 0.0, 1, 1]) # Adjusts spacing between subplots
+plt.subplots_adjust(wspace=0.6, hspace=0.6) 
 plt.show()
 plt.close()
 ```
+
+This plot shows us a breakdown of teams scoring in world cup games vs non world cup games. We notice that SCT has a big defensive breakdown when it comes to world cup games as they concede approximately 10 more points on average every game. Italy, to no ones surprise, continues to suck at all levels and even more so during world cups.
 
 ```{python year_wise_wins}
 #only kees the year, awayWin, homeWin, and country
@@ -374,7 +409,7 @@ year_wise = pd.concat([home_year_wise,away_year_wise], axis=0).reset_index(drop=
 #groups the data by year and by team and then cerates a win% col for normalized results
 def getGroupedYW(year_wise):
   year_wise_grouped = year_wise.groupby(["team","year"]).sum()
-  year_wise_grouped["win_%"] = year_wise_grouped["win"].div(year_wise_grouped["count"])
+  year_wise_grouped["win_%"] = year_wise_grouped["win"].div(year_wise_grouped["count"])*100
   year_wise_grouped = year_wise_grouped.drop(columns={"win","count"})
   return year_wise_grouped
 
@@ -385,16 +420,16 @@ year_wise_grouped = getGroupedYW(year_wise)
 def plotYearWiseData(year_wise_grouped):
   year_wise_grouped_reset = year_wise_grouped.reset_index()
 
-  plt.figure(figsize=(10, 6))
+  plt.figure(figsize=(7.5, 5))
   sns.lineplot(data=year_wise_grouped_reset, x='year', y='win_%', hue='team', 
              style='team', markers=True, dashes=False)
 
-  plt.title('Win Percentage by Team Over Years')
+  plt.title('Win Percentage by Team Over the Years')
   plt.xlabel('Year')
   plt.ylabel('Win Percentage')
   plt.legend(bbox_to_anchor=(1.001, 1), loc='upper left')
   plt.grid(True)
-  plt.tight_layout(rect=[0.02, 0.04, 1, 0.95])
+  plt.tight_layout()
   plt.show()
   plt.close()
 
@@ -426,6 +461,8 @@ first_half_grouped = getGroupedYW(df_first_half)
 plotYearWiseData(first_half_grouped)
 ```
 
+In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.
+
 ```{python second_half_plot}
 #uses the function to create the grouped data
 second_half_grouped = getGroupedYW(df_second_half)
@@ -433,3 +470,17 @@ second_half_grouped = getGroupedYW(df_second_half)
 #plots it
 plotYearWiseData(second_half_grouped)
 ```
+
+In this breakdown of IT, NZ, SCO, RSA, and WAL it is extremely obvious that NZ is the most dominant team in rugbby. They never went below 50% wins in the last 25 years of rugby contested among tier 1 teams. RSA is one team that is showing continuous improvement and actually surpassing NZ for the best win% in 2024. WAl and SCO are are good teams, but they tend to falter quite often. Italy dominates the losing charts when it comes to tier 1 teams in rugby.
+
+Key Insights from Visualizations
+
+-\> New Zealand has the highest win rates (87% at home, 73% away) and scoring averages.
+
+-\> Home Advantage: All teams perform better at home, with win rates \~20% higher on average.
+
+-\> World Cup Performance: Teams like South Africa and New Zealand maintain strong scoring in World Cups, while others (e.g., Italy) struggle.
+
+-\> Trends: New Zealand and Ireland show consistent dominance, while Argentina and Scotland exhibit volatility.
+
+This analysis sets the stage for modeling by identifying key performance metrics and historical trends.

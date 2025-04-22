@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>template</title>
+<title>edatemplate</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,10 +20,44 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="EDAtemplate_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="EDAtemplate_files/libs/clipboard/clipboard.min.js"></script>
 <script src="EDAtemplate_files/libs/quarto-html/quarto.js"></script>
 <script src="EDAtemplate_files/libs/quarto-html/popper.min.js"></script>
 <script src="EDAtemplate_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -33,6 +67,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="EDAtemplate_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="EDAtemplate_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="EDAtemplate_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -43,46 +80,862 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">template</h1>
+
+
+
+<p>Exploring the Data:</p>
+<ol type="1">
+<li>Outcome Variable: The outcome variable is predicting the country that will win the 2027 Rugby World Cup. This is measured using historical match data, including win percentages, points scored, and points conceded for each team. The data provides a strong foundation for understanding team performance over time, but it may not fully account for future changes in team dynamics, player injuries, or other unforeseen factors. The analysis aligns with expectations by highlighting New Zealand as the historically dominant team, but it also reveals trends for other competitive teams like South Africa and Ireland.</li>
+</ol>
+<p>Important to note that all statistics shown here are amongst games contested between the 10 tier 1 rugby teams.</p>
+<ol start="2" type="1">
+<li>Key Explanatory Variables:</li>
+</ol>
+<p>-&gt; Win Percentages (Home/Away): Measures team performance based on location.</p>
+<p>-&gt; Average Points Scored/Conceded: Reflects offensive and defensive capabilities.</p>
+<p>-&gt; World Cup vs.&nbsp;Non-World Cup Performance: Differentiates performance in high-stakes tournaments.</p>
+<p>-&gt; Yearly Trends: Tracks team performance over time to identify improvements or declines.</p>
+<ol start="3" type="1">
+<li>Summary Statistics: Below is a summary of key variables from the dataset (after filtering for post-1999 data):</li>
+</ol>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Count</th>
+<th>Mean</th>
+<th>Std</th>
+<th>Min</th>
+<th>25%</th>
+<th>50%</th>
+<th>75%</th>
+<th>Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>home_score</td>
+<td>1230</td>
+<td>25.07</td>
+<td>13.15</td>
+<td>0</td>
+<td>16</td>
+<td>23</td>
+<td>32</td>
+<td>101</td>
+</tr>
+<tr class="even">
+<td>away_score</td>
+<td>1230</td>
+<td>20.78</td>
+<td>11.38</td>
+<td>0</td>
+<td>13</td>
+<td>19</td>
+<td>27</td>
+<td>68</td>
+</tr>
+<tr class="odd">
+<td>homeWin</td>
+<td>1230</td>
+<td>0.60</td>
+<td>0.49</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>awayWin</td>
+<td>1230</td>
+<td>0.38</td>
+<td>0.49</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>year</td>
+<td>1230</td>
+<td>2011.50</td>
+<td>7.19</td>
+<td>1999</td>
+<td>2006</td>
+<td>2012</td>
+<td>2018</td>
+<td>2024</td>
+</tr>
+</tbody>
+</table>
+<p>Data Wrangling and Transformation 1. Data Cleaning:</p>
+<p>-&gt; Removed matches before 1999 to focus on recent performance.</p>
+<p>-&gt; Dropped rows with missing values to ensure data integrity.</p>
+<ol start="2" type="1">
+<li>Data Wrangling:</li>
+</ol>
+<p>-&gt; Created a year column by extracting the year from the date column.</p>
+<p>-&gt; Added binary variables homeWin and awayWin to track match outcomes.</p>
+<p>-&gt; Aggregated data by team to calculate win percentages and average points scored/conceded.</p>
+<ol start="3" type="1">
+<li>Excluded Observations:</li>
+</ol>
+<p>-&gt; Excluded matches before 1999 to focus on modern rugby dynamics.</p>
+<p>-&gt; Dropped rows with missing values (though none were present after filtering).</p>
+<ol start="4" type="1">
+<li>New Variables:</li>
+</ol>
+<p>-&gt; homeWin/awayWin: Binary indicators for match outcomes.</p>
+<p>-&gt; home_win%/away_win%: Team-specific win rates.</p>
+<p>-&gt; home_score_avg/away_score_avg: Average points scored per match.</p>
+<p>-&gt; home_conceded_avg/away_conceded_avg: Average points conceded per match.</p>
+<p>These transformations were done to quantify team performance and home/away advantages, which are critical for predicting World Cup success.</p>
+<p>Codebook for EDA</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>year</td>
+<td>Integer</td>
+<td>Extracted from date to filter matches post-1999.</td>
+</tr>
+<tr class="even">
+<td>homeWin</td>
+<td>Binary (0/1)</td>
+<td>Indicates if the home team won (1) or not (0).</td>
+</tr>
+<tr class="odd">
+<td>awayWin</td>
+<td>Binary (0/1)</td>
+<td>Indicates if the away team won (1) or not (0).</td>
+</tr>
+<tr class="even">
+<td>count</td>
+<td>Integer</td>
+<td>Dummy variable for counting matches (always 1). Used for aggregations.</td>
+</tr>
+<tr class="odd">
+<td>home_win%</td>
+<td>Float</td>
+<td>Home win percentage for each team.</td>
+</tr>
+<tr class="even">
+<td>away_win%</td>
+<td>Float</td>
+<td>Away win percentage for each team.</td>
+</tr>
+<tr class="odd">
+<td>home_score_avg</td>
+<td>Float</td>
+<td>Average points scored by a team at home.</td>
+</tr>
+<tr class="even">
+<td>away_score_avg</td>
+<td>Float</td>
+<td>Average points scored by a team away.</td>
+</tr>
+<tr class="odd">
+<td>home_conceded_avg</td>
+<td>Float</td>
+<td>Average points conceded by a team at home.</td>
+</tr>
+<tr class="even">
+<td>away_conceded_avg</td>
+<td>Float</td>
+<td>Average points conceded by a team away.</td>
+</tr>
+<tr class="odd">
+<td>win_% (yearly)</td>
+<td>Float</td>
+<td>Yearly win percentage for each team.</td>
+</tr>
+</tbody>
+</table>
+<p>Importing python packages</p>
+<div id="c8450f30" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Importing rugby data and finding the shape</p>
+<div id="2a0e543c" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rugbyDF <span class="op">=</span> pd.read_csv(<span class="st">"data/rugby.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rugbyDF.shape</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#(2783, 11)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(2783, 11)</code></pre>
+</div>
+</div>
+<div id="2c472024" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#only keeping data after 1999</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#will create a year col and then trim the data</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>rugbyDF[<span class="st">'year'</span>] <span class="op">=</span> rugbyDF[<span class="st">'date'</span>].<span class="bu">str</span>[<span class="dv">0</span>:<span class="dv">4</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>rugbyDF <span class="op">=</span> rugbyDF[rugbyDF.year <span class="op">&gt;</span> <span class="dv">1998</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>rugbyDF.dropna(inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>rugbyDF.shape</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#new shape of dataframe: (1230,12)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>(1230, 12)</code></pre>
+</div>
+</div>
+<div id="6d664321" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating variable to track if home or away team won</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#created weights for win, draw, and loss</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rugbyDF[<span class="st">"homeWin"</span>] <span class="op">=</span> np.where(rugbyDF[<span class="st">"home_score"</span>] <span class="op">&gt;</span> rugbyDF[<span class="st">"away_score"</span>], <span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>rugbyDF[<span class="st">"awayWin"</span>] <span class="op">=</span> np.where(rugbyDF[<span class="st">"home_score"</span>] <span class="op">&lt;</span> rugbyDF[<span class="st">"away_score"</span>], <span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#creating a count var to help with num of games played later on</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>rugbyDF[<span class="st">"count"</span>] <span class="op">=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e6e0dac9" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cols <span class="kw">in</span> rugbyDF.columns:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(cols <span class="op">+</span> <span class="st">": "</span> <span class="op">+</span> (<span class="bu">str</span>)(rugbyDF[cols].dtype))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Since there are 2 numerical cols, i can get summary statistics on them</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#year variable will not be taken into account for summary statistics</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>rugbyDF.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>date: object
+home_team: object
+away_team: object
+home_score: int64
+away_score: int64
+competition: object
+stadium: object
+city: object
+country: object
+neutral: bool
+world_cup: bool
+year: int64
+homeWin: int64
+awayWin: int64
+count: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">home_score</th>
+<th data-quarto-table-cell-role="th">away_score</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">homeWin</th>
+<th data-quarto-table-cell-role="th">awayWin</th>
+<th data-quarto-table-cell-role="th">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>1230.000000</td>
+<td>1230.000000</td>
+<td>1230.000000</td>
+<td>1230.000000</td>
+<td>1230.000000</td>
+<td>1230.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>25.065041</td>
+<td>20.778862</td>
+<td>2011.502439</td>
+<td>0.595935</td>
+<td>0.383740</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>13.147990</td>
+<td>11.384752</td>
+<td>7.192092</td>
+<td>0.490910</td>
+<td>0.486494</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1999.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>16.000000</td>
+<td>13.000000</td>
+<td>2006.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>23.000000</td>
+<td>19.000000</td>
+<td>2012.000000</td>
+<td>1.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>32.000000</td>
+<td>27.000000</td>
+<td>2018.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>101.000000</td>
+<td>68.000000</td>
+<td>2024.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
 
-<div class="quarto-title-meta">
+</div>
+</div>
+</div>
+<p>We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.</p>
+<p>We also notice that the home team won ~59.6%* of the games contested.</p>
+<p>*This does not account for games that take place in neutral venues.</p>
+<div id="7c646de4" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create diff df by teams, then find the summary statistics for those teams.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>unq_hteams <span class="op">=</span> rugbyDF[<span class="st">'home_team'</span>].unique()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>unq_ateams <span class="op">=</span> rugbyDF[<span class="st">'away_team'</span>].unique()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>unq_teams <span class="op">=</span> np.unique((unq_hteams, unq_ateams))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>unq_teams</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#shortens the df to only include awayteam, awaywin or hometeam, homewin</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>rugbyDFH <span class="op">=</span> rugbyDF[[<span class="st">"home_team"</span>,<span class="st">"homeWin"</span>,<span class="st">"count"</span>]]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>rugbyDFA <span class="op">=</span> rugbyDF[[<span class="st">"away_team"</span>,<span class="st">"awayWin"</span>,<span class="st">"count"</span>]]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#groups the data by team</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>groupedH <span class="op">=</span> rugbyDFH.groupby(<span class="st">'home_team'</span>).<span class="bu">sum</span>()</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>groupedA <span class="op">=</span> rugbyDFA.groupby(<span class="st">'away_team'</span>).<span class="bu">sum</span>()</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#renames the axis to the same thing</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>groupedA <span class="op">=</span> groupedA.rename_axis(<span class="st">'team'</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>groupedH <span class="op">=</span> groupedH.rename_axis(<span class="st">'team'</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#find team win percentage by away and home </span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>groupedH[<span class="st">"home_win%"</span>] <span class="op">=</span> groupedH[<span class="st">"homeWin"</span>]<span class="op">/</span>groupedH[<span class="st">"count"</span>] <span class="op">*</span><span class="dv">100</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>groupedA[<span class="st">"away_win%"</span>] <span class="op">=</span> groupedA[<span class="st">"awayWin"</span>]<span class="op">/</span>groupedA[<span class="st">"count"</span>] <span class="op">*</span><span class="dv">100</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#renames count so that they dont clash when merging</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>groupedH <span class="op">=</span> groupedH.rename(columns<span class="op">=</span>{<span class="st">'count'</span>: <span class="st">'count_home'</span>})</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>groupedA <span class="op">=</span> groupedA.rename(columns<span class="op">=</span>{<span class="st">'count'</span>: <span class="st">'count_away'</span>})</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#merge the data frames</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>teams_wins <span class="op">=</span> pd.merge(groupedH, groupedA, on<span class="op">=</span><span class="st">'team'</span>, how<span class="op">=</span><span class="st">'inner'</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>teams_wins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
 
-    
-  
-    
-  </div>
-  
 
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">homeWin</th>
+<th data-quarto-table-cell-role="th">count_home</th>
+<th data-quarto-table-cell-role="th">home_win%</th>
+<th data-quarto-table-cell-role="th">awayWin</th>
+<th data-quarto-table-cell-role="th">count_away</th>
+<th data-quarto-table-cell-role="th">away_win%</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">team</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Argentina</td>
+<td>30</td>
+<td>89</td>
+<td>33.707865</td>
+<td>29</td>
+<td>109</td>
+<td>26.605505</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Australia</td>
+<td>92</td>
+<td>139</td>
+<td>66.187050</td>
+<td>54</td>
+<td>146</td>
+<td>36.986301</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">England</td>
+<td>102</td>
+<td>144</td>
+<td>70.833333</td>
+<td>55</td>
+<td>118</td>
+<td>46.610169</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">France</td>
+<td>85</td>
+<td>126</td>
+<td>67.460317</td>
+<td>49</td>
+<td>129</td>
+<td>37.984496</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Ireland</td>
+<td>90</td>
+<td>123</td>
+<td>73.170732</td>
+<td>49</td>
+<td>115</td>
+<td>42.608696</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Italy</td>
+<td>13</td>
+<td>96</td>
+<td>13.541667</td>
+<td>6</td>
+<td>109</td>
+<td>5.504587</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">New Zealand</td>
+<td>121</td>
+<td>139</td>
+<td>87.050360</td>
+<td>100</td>
+<td>137</td>
+<td>72.992701</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Scotland</td>
+<td>46</td>
+<td>112</td>
+<td>41.071429</td>
+<td>26</td>
+<td>106</td>
+<td>24.528302</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">South Africa</td>
+<td>90</td>
+<td>124</td>
+<td>72.580645</td>
+<td>65</td>
+<td>143</td>
+<td>45.454545</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Wales</td>
+<td>64</td>
+<td>138</td>
+<td>46.376812</td>
+<td>39</td>
+<td>118</td>
+<td>33.050847</td>
+</tr>
+</tbody>
+</table>
 
-</header>
-
-
-<p>##1. Data Overview Dataset Structure: Check rows, columns, and data types.</p>
-<p>Missing Values: Identify and handle missing data.</p>
-<p>Basic Statistics: Summary stats (mean, median, min, max, etc.) for numerical variables.</p>
-<p>Key Variables to Examine (Depending on Dataset) Match Data: Date, teams, score, venue, competition.</p>
-<p>Team Data: Win/loss records, points scored/conceded, penalties.</p>
-<p>Game Events: Kicks, lineouts, scrums, turnovers.</p>
-<p>##2. Univariate Analysis Analyze individual variables to understand distributions.</p>
-<p>Numerical Variables Distribution Plots: Histograms, boxplots (e.g., points scored, tackles made).</p>
-<p>Key Metrics: Average points per match.</p>
-<p>Categorical Variables Bar Charts:</p>
-<p>Most frequent match outcomes (win/loss/draw).</p>
-<p>Top teams by wins or points.</p>
-<p>##3. Bivariate &amp; Multivariate Analysis Examine relationships between variables.</p>
-<p>Team Performance Win/Loss vs.&nbsp;Home/Away: Do teams perform better at home?</p>
-<p>Score Difference Analysis: How often do matches have close margins?</p>
-<p>Points Scored vs.&nbsp;Conceded: Defensive vs.&nbsp;offensive strength.</p>
-<p>Correlation Analysis:</p>
-<p>Does more possession lead to more points?</p>
-<p>Are more penalties associated with losses?</p>
-<p>##4. Time-Based Trends Seasonal Performance: Do teams perform better at certain times of the year?</p>
-<p>Team Improvement/Decline: Win rate trends over seasons.</p>
+</div>
+</div>
+</div>
+<p>This data frame represents the team wise performance breakdown from 1999-2024.</p>
+<div id="45d8ae08" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="bu">len</span>(unq_teams))  <span class="co"># Team positions</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.37</span>  <span class="co"># Bar width</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.barh(y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span>, teams_wins[<span class="st">"home_win%"</span>], width, label<span class="op">=</span><span class="st">'Home Win %'</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.barh(y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span>, teams_wins[<span class="st">"away_win%"</span>], width, label<span class="op">=</span><span class="st">'Away Win %'</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.yticks(y, unq_teams)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add labels and title</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Teams'</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Home Win% and Away Win%'</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Home and Away Win Percentage By Team'</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-8-output-1.png" width="662" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking at the graph, it is very clear that New Zealand is the best team since 1999. It is also very clear that every team here has a better home record when compared to away record. Italy just keeps losing, hwich makes you question how they became a tier 1 nation.</p>
+<div id="7beff6e5" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#a function to create a scoring dataset</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> createscoringdataset(rugbyDF):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#shortens the df to only include awayteam, awaywin or hometeam, homewin</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  rugbyDFH_score <span class="op">=</span> rugbyDF[[<span class="st">"home_team"</span>,<span class="st">"home_score"</span>,<span class="st">"away_score"</span>,<span class="st">"count"</span>]]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  rugbyDFA_score <span class="op">=</span> rugbyDF[[<span class="st">"away_team"</span>,<span class="st">"away_score"</span>,<span class="st">"home_score"</span>,<span class="st">"count"</span>]]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#renaming away_score and home_score to home_conceded and away_conceded</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  rugbyDFH_score <span class="op">=</span> rugbyDFH_score.rename(columns<span class="op">=</span>{<span class="st">'away_score'</span>: <span class="st">'home_conceded'</span>})</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  rugbyDFA_score <span class="op">=</span> rugbyDFA_score.rename(columns<span class="op">=</span>{<span class="st">'home_score'</span>: <span class="st">'away_conceded'</span>})</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#groups the data by team</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  groupedH_score <span class="op">=</span> rugbyDFH_score.groupby(<span class="st">'home_team'</span>).<span class="bu">sum</span>()</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  groupedA_score <span class="op">=</span> rugbyDFA_score.groupby(<span class="st">'away_team'</span>).<span class="bu">sum</span>()</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#renames the axis to the same thing</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  groupedH_score <span class="op">=</span> groupedH_score.rename_axis(<span class="st">'team'</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  groupedA_score <span class="op">=</span> groupedA_score.rename_axis(<span class="st">'team'</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#merge the data frames</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  teams_score <span class="op">=</span> pd.merge(groupedH_score, groupedA_score, on<span class="op">=</span><span class="st">'team'</span>, how<span class="op">=</span><span class="st">'inner'</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#rename count_x and count_y to home_played and away_played</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  teams_score <span class="op">=</span> teams_score.rename(columns<span class="op">=</span>{<span class="st">'count_x'</span>: <span class="st">'home_played'</span>, <span class="st">'count_y'</span>: <span class="st">'away_played'</span>})</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#find team win percentage by away and home </span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  teams_score[<span class="st">"home_score_avg"</span>] <span class="op">=</span> teams_score[<span class="st">"home_score"</span>]<span class="op">/</span>teams_score[<span class="st">"home_played"</span>]</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  teams_score[<span class="st">"away_score_avg"</span>] <span class="op">=</span> teams_score[<span class="st">"away_score"</span>]<span class="op">/</span>teams_score[<span class="st">"away_played"</span>]</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  teams_score[<span class="st">"home_conceded_avg"</span>] <span class="op">=</span> teams_score[<span class="st">"home_conceded"</span>]<span class="op">/</span>teams_score[<span class="st">"home_played"</span>]</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  teams_score[<span class="st">"away_conceded_avg"</span>] <span class="op">=</span> teams_score[<span class="st">"away_conceded"</span>]<span class="op">/</span>teams_score[<span class="st">"away_played"</span>]</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> teams_score</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>teams_score <span class="op">=</span> createscoringdataset(rugbyDF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="886da36a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 2x2 grid of subplots</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>)  <span class="co"># 2 rows, 2 columns</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add main title</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Teamwise Home vs Away Performance"</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">16</span>, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>             y<span class="op">=</span><span class="fl">1.02</span>,          <span class="co"># Adjust vertical position (1.0 = top of plot)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>             fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1: Home Win %</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].barh(unq_teams, teams_wins[<span class="st">"home_win%"</span>], color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'Home Win Percentage'</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_xlabel(<span class="st">'Win %'</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 2: Away Win %</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].barh(unq_teams, teams_wins[<span class="st">"away_win%"</span>], color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'Away Win Percentage'</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_xlabel(<span class="st">'Win %'</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 3: Home vs Away Comparison (side-by-side)</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(unq_teams))</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].barh([y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], teams_wins[<span class="st">"home_win%"</span>], width, label<span class="op">=</span><span class="st">'Home'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].barh([y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], teams_wins[<span class="st">"away_win%"</span>], width, label<span class="op">=</span><span class="st">'Away'</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'Home vs Away Comparison'</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_xlabel(<span class="st">'Win %'</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_yticks(y)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_yticklabels(unq_teams)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].legend()</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 4: Difference (Home - Away)</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].barh(unq_teams, teams_wins[<span class="st">"home_win%"</span>] <span class="op">-</span> teams_wins[<span class="st">"away_win%"</span>], color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'Home Advantage (Home - Away)'</span>)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_xlabel(<span class="st">'Win % Difference'</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="fl">0.00</span>, <span class="fl">0.0</span>, <span class="dv">1</span>, <span class="dv">1</span>]) <span class="co"># Adjusts spacing between subplots</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.7</span>, hspace<span class="op">=</span><span class="fl">0.6</span>) </span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-10-output-1.png" width="691" height="494" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a more detailed plot from the one above this. It also includes a direct comparison of a teams home advantage. Here it is the difference between their home win% and away win%. We can notice that RSA, IRE, ENG, and AUS are countries that really enjoy playing at home.</p>
+<div id="c49043be" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure with 2x2 subplots</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add main title</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Teamwise Offense vs Defense"</span>, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">16</span>, </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>             y<span class="op">=</span><span class="fl">1.02</span>,          <span class="co"># Adjust vertical position (1.0 = top of plot)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>             fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Plot 1: Home vs Away Points Scored ---</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="bu">len</span>(unq_teams))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].bar(y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span>, teams_score[<span class="st">'home_score_avg'</span>], width, label<span class="op">=</span><span class="st">'Home'</span>, color<span class="op">=</span><span class="st">'#2ecc71'</span>)  <span class="co"># Green</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].bar(y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span>, teams_score[<span class="st">'away_score_avg'</span>], width, label<span class="op">=</span><span class="st">'Away'</span>, color<span class="op">=</span><span class="st">'#e74c3c'</span>)  <span class="co"># Red</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Average Points Scored per Match'</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Points'</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xticks(y)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xticklabels(unq_teams, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Plot 2: Home vs Away Points Conceded ---</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].bar(y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span>, teams_score[<span class="st">'home_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'Home'</span>, color<span class="op">=</span><span class="st">'#2ecc71'</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].bar(y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span>, teams_score[<span class="st">'away_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'Away'</span>, color<span class="op">=</span><span class="st">'#e74c3c'</span>)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Average Points Conceded per Match'</span>)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Points'</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xticks(y)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xticklabels(unq_teams, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].legend()</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust layout</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="fl">0.04</span>, <span class="fl">0.065</span>, <span class="dv">1</span>, <span class="dv">1</span>]) <span class="co"># Adjusts spacing between subplots</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.3</span>, hspace<span class="op">=</span><span class="fl">1.2</span>) </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-11-output-1.png" width="635" height="463" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plot shows teams scoring breakdown home vs away. It gives us an insight into a teams offense and defense over the 25 year time period. Interestingly, Argentina seems to be the only country where their defense is actually more impressive away from home when compared to at home. We notice that their average points conceded away from home is slightly less than when they play at home.</p>
+<div id="ef235a78" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creates world cup scoring df</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>worldCupDF <span class="op">=</span> rugbyDF[rugbyDF.world_cup <span class="op">==</span> <span class="va">True</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>nonWorldCup <span class="op">=</span> rugbyDF[rugbyDF.world_cup <span class="op">==</span> <span class="va">False</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>wc_scoring <span class="op">=</span> createscoringdataset(worldCupDF)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>non_wc_scoring <span class="op">=</span> createscoringdataset(nonWorldCup)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a9daa3bb" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 2x2 grid of subplots</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>)  <span class="co"># 2 rows, 2 columns</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add main title</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"World Cup vs Non World Cup Offense and Defense"</span>, </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">16</span>, </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>             y<span class="op">=</span><span class="fl">1.02</span>,          <span class="co"># Adjust vertical position (1.0 = top of plot)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>             fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1: World Cup vs Non World Cup home-score-avg</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(unq_teams))</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].barh([y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], wc_scoring[<span class="st">'home_score_avg'</span>], width, label<span class="op">=</span><span class="st">'World Cup'</span>, color<span class="op">=</span><span class="st">'#D4AF37'</span>) </span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].barh([y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], non_wc_scoring[<span class="st">'home_score_avg'</span>], width, label<span class="op">=</span><span class="st">'Non World Cup'</span>, color<span class="op">=</span><span class="st">'#A6A6A6'</span>)  </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'Home Points'</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_xlabel(<span class="st">'Avg Points'</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_yticks(y)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_yticklabels(unq_teams)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 2: World Cup vs Non World Cup away-score-avg</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].barh([y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], wc_scoring[<span class="st">'away_score_avg'</span>], width, label<span class="op">=</span><span class="st">'World Cup'</span>, color<span class="op">=</span><span class="st">'#D4AF37'</span>) </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].barh([y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], non_wc_scoring[<span class="st">'away_score_avg'</span>], width, label<span class="op">=</span><span class="st">'Non World Cup'</span>, color<span class="op">=</span><span class="st">'#A6A6A6'</span>)  </span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'Away Points '</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_xlabel(<span class="st">'Avg Points'</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_yticks(y)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_yticklabels(unq_teams)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 3: World Cup vs Non World Cup home-conceded-avg</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].barh([y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], wc_scoring[<span class="st">'home_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'World Cup'</span>, color<span class="op">=</span><span class="st">'#D4AF37'</span>) </span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].barh([y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], non_wc_scoring[<span class="st">'home_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'Non World Cup'</span>, color<span class="op">=</span><span class="st">'#A6A6A6'</span>)  </span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'Home Conceded '</span>)</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_xlabel(<span class="st">'Avg Points'</span>)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_yticks(y)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_yticklabels(unq_teams)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 4: World Cup vs Non World Cup away-conceded-avg</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].barh([y <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], wc_scoring[<span class="st">'away_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'World Cup'</span>, color<span class="op">=</span><span class="st">'#D4AF37'</span>) </span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].barh([y <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> y], non_wc_scoring[<span class="st">'away_conceded_avg'</span>], width, label<span class="op">=</span><span class="st">'Non World Cup'</span>, color<span class="op">=</span><span class="st">'#A6A6A6'</span>)  </span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'Away Conceded '</span>)</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_xlabel(<span class="st">'Avg Points'</span>)</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_yticks(y)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_yticklabels(unq_teams)</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Create invisible artist in center</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>fig.patches.extend([plt.Rectangle((<span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="fl">0.01</span>, <span class="fl">0.01</span>, </span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>                                alpha<span class="op">=</span><span class="dv">0</span>, zorder<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>                                transform<span class="op">=</span>fig.transFigure)])</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Create unified legend</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>legend_elements <span class="op">=</span> [</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>    plt.Rectangle((<span class="dv">0</span>,<span class="dv">0</span>), <span class="dv">1</span>, <span class="dv">1</span>, fc<span class="op">=</span><span class="st">'#D4AF37'</span>, ec<span class="op">=</span><span class="st">'#B8860B'</span>, lw<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="st">'WC'</span>),</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>    plt.Rectangle((<span class="dv">0</span>,<span class="dv">0</span>), <span class="dv">1</span>, <span class="dv">1</span>, fc<span class="op">=</span><span class="st">'#A6A6A6'</span>, ec<span class="op">=</span><span class="st">'#808080'</span>, lw<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="st">'Non WC'</span>)</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Place legend in absolute center</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> fig.legend(handles<span class="op">=</span>legend_elements,</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>                   loc<span class="op">=</span><span class="st">'center'</span>,</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>                   bbox_to_anchor<span class="op">=</span>(<span class="fl">0.60</span>, <span class="fl">0.49</span>),  <span class="co"># Dead center</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>                   bbox_transform<span class="op">=</span>fig.transFigure,</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>                   frameon<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>                   title<span class="op">=</span><span class="st">'Match Type'</span>,</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>                   borderaxespad<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="fl">0.07</span>, <span class="fl">0.0</span>, <span class="dv">1</span>, <span class="dv">1</span>]) <span class="co"># Adjusts spacing between subplots</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.6</span>, hspace<span class="op">=</span><span class="fl">0.6</span>) </span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-13-output-1.png" width="643" height="494" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plot shows us a breakdown of teams scoring in world cup games vs non world cup games. We notice that SCT has a big defensive breakdown when it comes to world cup games as they concede approximately 10 more points on average every game. Italy, to no ones surprise, continues to suck at all levels and even more so during world cups.</p>
+<div id="bd7353aa" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#only kees the year, awayWin, homeWin, and country</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>year_wise <span class="op">=</span> rugbyDF[[<span class="st">"home_team"</span>,<span class="st">"away_team"</span>,<span class="st">"homeWin"</span>,<span class="st">"awayWin"</span>,<span class="st">"count"</span>,<span class="st">"year"</span>]]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#drops the away in homeDf and home in awayDf</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>home_year_wise <span class="op">=</span> year_wise.drop(columns<span class="op">=</span>{<span class="st">"away_team"</span>,<span class="st">"awayWin"</span>})</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>away_year_wise <span class="op">=</span> year_wise.drop(columns<span class="op">=</span>{<span class="st">"home_team"</span>,<span class="st">"homeWin"</span>})</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#renames so that both df have the same col names for concatenation</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>home_year_wise <span class="op">=</span> home_year_wise.rename(columns<span class="op">=</span>{<span class="st">"home_team"</span>:<span class="st">"team"</span>,<span class="st">"homeWin"</span>:<span class="st">"win"</span>})</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>away_year_wise <span class="op">=</span> away_year_wise.rename(columns<span class="op">=</span>{<span class="st">"away_team"</span>:<span class="st">"team"</span>,<span class="st">"awayWin"</span>:<span class="st">"win"</span>})</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>year_wise <span class="op">=</span> pd.concat([home_year_wise,away_year_wise], axis<span class="op">=</span><span class="dv">0</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#groups the data by year and by team and then cerates a win% col for normalized results</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getGroupedYW(year_wise):</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  year_wise_grouped <span class="op">=</span> year_wise.groupby([<span class="st">"team"</span>,<span class="st">"year"</span>]).<span class="bu">sum</span>()</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  year_wise_grouped[<span class="st">"win_%"</span>] <span class="op">=</span> year_wise_grouped[<span class="st">"win"</span>].div(year_wise_grouped[<span class="st">"count"</span>])<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  year_wise_grouped <span class="op">=</span> year_wise_grouped.drop(columns<span class="op">=</span>{<span class="st">"win"</span>,<span class="st">"count"</span>})</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> year_wise_grouped</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>year_wise_grouped <span class="op">=</span> getGroupedYW(year_wise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f27a20ed" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plotYearWiseData(year_wise_grouped):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  year_wise_grouped_reset <span class="op">=</span> year_wise_grouped.reset_index()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  plt.figure(figsize<span class="op">=</span>(<span class="fl">7.5</span>, <span class="dv">5</span>))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  sns.lineplot(data<span class="op">=</span>year_wise_grouped_reset, x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'win_%'</span>, hue<span class="op">=</span><span class="st">'team'</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>             style<span class="op">=</span><span class="st">'team'</span>, markers<span class="op">=</span><span class="va">True</span>, dashes<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  plt.title(<span class="st">'Win Percentage by Team Over the Years'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  plt.xlabel(<span class="st">'Year'</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  plt.ylabel(<span class="st">'Win Percentage'</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  plt.legend(bbox_to_anchor<span class="op">=</span>(<span class="fl">1.001</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  plt.grid(<span class="va">True</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  plt.tight_layout()</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  plt.close()</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>plotYearWiseData(year_wise_grouped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-15-output-1.png" width="709" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.</p>
+<div id="9251faf0" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split teams into two halves</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>half_idx <span class="op">=</span> <span class="bu">len</span>(unq_teams) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>first_half_teams <span class="op">=</span> unq_teams[:half_idx]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>second_half_teams <span class="op">=</span> unq_teams[half_idx:]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create filtered DataFrames</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>df_first_half <span class="op">=</span> year_wise[year_wise[<span class="st">'team'</span>].isin(first_half_teams)]</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>df_second_half <span class="op">=</span> year_wise[year_wise[<span class="st">'team'</span>].isin(second_half_teams)]</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Checking if the teams do not overlap</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>df_first_half[<span class="st">"team"</span>].unique()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>df_second_half[<span class="st">"team"</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>array(['Scotland', 'Wales', 'South Africa', 'New Zealand', 'Italy'],
+      dtype=object)</code></pre>
+</div>
+</div>
+<div id="ffe42816" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#uses the function to create the grouped data</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>first_half_grouped <span class="op">=</span> getGroupedYW(df_first_half)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plots it</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plotYearWiseData(first_half_grouped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-17-output-1.png" width="709" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.</p>
+<div id="99b13cb7" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#uses the function to create the grouped data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>second_half_grouped <span class="op">=</span> getGroupedYW(df_second_half)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plots it</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plotYearWiseData(second_half_grouped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDAtemplate_files/figure-html/cell-18-output-1.png" width="709" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this breakdown of IT, NZ, SCO, RSA, and WAL it is extremely obvious that NZ is the most dominant team in rugbby. They never went below 50% wins in the last 25 years of rugby contested among tier 1 teams. RSA is one team that is showing continuous improvement and actually surpassing NZ for the best win% in 2024. WAl and SCO are are good teams, but they tend to falter quite often. Italy dominates the losing charts when it comes to tier 1 teams in rugby.</p>
+<p>Key Insights from Visualizations</p>
+<p>-&gt; New Zealand has the highest win rates (87% at home, 73% away) and scoring averages.</p>
+<p>-&gt; Home Advantage: All teams perform better at home, with win rates ~20% higher on average.</p>
+<p>-&gt; World Cup Performance: Teams like South Africa and New Zealand maintain strong scoring in World Cups, while others (e.g., Italy) struggle.</p>
+<p>-&gt; Trends: New Zealand and Ireland show consistent dominance, while Argentina and Scotland exhibit volatility.</p>
+<p>This analysis sets the stage for modeling by identifying key performance metrics and historical trends.</p>
 
 </main>
 <!-- /main column -->

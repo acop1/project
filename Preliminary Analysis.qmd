@@ -190,7 +190,7 @@ df = pd.read_csv('data/rugby.csv')
 
 # Data preprocessing
 # Filter to only international matches (remove club matches)
-international_matches = df['competition'].str.contains('International|Championship|Nations|World Cup|Test Match')
+international_matches = df['competition'].str.contains('International|Championship|Nations|World Cup|Test Match', na=False)
 df = df.loc[international_matches].copy()
 
 # Feature engineering
@@ -375,6 +375,7 @@ for team, prob in sorted(win_probabilities.items(), key=lambda x: x[1], reverse=
 
 Create a worldcup dataset that has each teams outcome for that world cup, elo rating, avg_point_diff, and win_pct for that year.
 ```{python}
+"""
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
@@ -405,5 +406,5 @@ model = OrderedModel(
 # Fit the model
 res = model.fit(method='bfgs')
 print(res.summary())
-
+"""
 ```

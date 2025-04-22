@@ -181,7 +181,7 @@
         "\n",
         "- Decision-Making Under Uncertainty: Useful in finance (portfolio risk), healthcare (treatment outcomes), or engineering (system failures).\n"
       ],
-      "id": "a62d029a"
+      "id": "ac191f6b"
     },
     {
       "cell_type": "code",
@@ -201,7 +201,7 @@
         "\n",
         "# Data preprocessing\n",
         "# Filter to only international matches (remove club matches)\n",
-        "international_matches = df['competition'].str.contains('International|Championship|Nations|World Cup|Test Match')\n",
+        "international_matches = df['competition'].str.contains('International|Championship|Nations|World Cup|Test Match', na=False)\n",
         "df = df.loc[international_matches].copy()\n",
         "\n",
         "# Feature engineering\n",
@@ -273,7 +273,7 @@
         "\n",
         "df = add_features(df, team_stats)"
       ],
-      "id": "1e35d8f4",
+      "id": "1dcd0642",
       "execution_count": null,
       "outputs": []
     },
@@ -310,7 +310,7 @@
         "accuracy = accuracy_score(y_test, y_pred)\n",
         "print(f\"Model accuracy: {accuracy:.2f}\")"
       ],
-      "id": "708fbf03",
+      "id": "e3b83850",
       "execution_count": null,
       "outputs": []
     },
@@ -387,7 +387,7 @@
         "    if prob > 0:\n",
         "        print(f\"{team}: {prob:.1f}%\")"
       ],
-      "id": "c740399c",
+      "id": "e46af138",
       "execution_count": null,
       "outputs": []
     },
@@ -401,13 +401,12 @@
         "\n",
         "Create a worldcup dataset that has each teams outcome for that world cup, elo rating, avg_point_diff, and win_pct for that year."
       ],
-      "id": "051e14d6"
+      "id": "1ff0065c"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
-        "\"\"\"\n",
         "import pandas as pd\n",
         "import numpy as np\n",
         "import statsmodels.api as sm\n",
@@ -437,10 +436,9 @@
         "\n",
         "# Fit the model\n",
         "res = model.fit(method='bfgs')\n",
-        "print(res.summary())\n",
-        "\"\"\""
+        "print(res.summary())"
       ],
-      "id": "c4a97e31",
+      "id": "2f9de0a5",
       "execution_count": null,
       "outputs": []
     }

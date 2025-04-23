@@ -57,7 +57,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Preliminary Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="Preliminary Analysis_files/libs/clipboard/clipboard.min.js"></script>
 <script src="Preliminary Analysis_files/libs/quarto-html/quarto.js"></script>
 <script src="Preliminary Analysis_files/libs/quarto-html/popper.min.js"></script>
 <script src="Preliminary Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -67,6 +67,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Preliminary Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Preliminary Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Preliminary Analysis_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -80,6 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p>author: Ken Kabeya and Aneesh Koppolu format: pdf</p>
 <p>Preliminary Analysis</p>
 <hr>
 <section id="introduction" class="level2">
@@ -189,20 +193,301 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p><strong>Observation</strong>:<br>
 On average, the <strong>home team outperforms the away team by ~4.3 points</strong>. The home win rate is significantly higher across all teams.</p>
-<hr>
-</section>
-<section id="key-visualizations" class="level3">
-<h3 class="anchored" data-anchor-id="key-visualizations"><strong>Key Visualizations</strong></h3>
-<p><strong>1. Home and Away Win Rates by Team</strong> <img src="data:image/png;base64,[image_placeholder]" alt="Win Rate Plot"></p>
-<ul>
-<li>New Zealand dominates both at home and away.</li>
-<li>All teams perform <strong>better at home</strong>, confirming home advantage.</li>
-<li>Italy underperforms consistently.</li>
-</ul>
-<p><strong>2. Average Points Scored vs.&nbsp;Conceded</strong> - Teams like <strong>New Zealand</strong> and <strong>South Africa</strong> show high scores with low concession. - <strong>Italy</strong> and <strong>Scotland</strong> concede more than they score, especially in away games.</p>
-<p><strong>3. World Cup vs.&nbsp;Regular Match Comparison</strong> - <strong>Ireland and South Africa</strong> maintain strong performance in both contexts. - Some teams <strong>drop significantly in performance during World Cups</strong>, revealing tournament pressure or lack of depth.</p>
-<p><strong>4. Year-wise Win Percentage Trends</strong> - Shows <strong>consistency and peaks</strong> for contenders like <strong>NZ, RSA, and IRE</strong>. - Allows modeling team form trajectory over time.</p>
-<hr>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">### <strong>Key Visualizations</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>1. Home and Away Win Rates by Team</strong> <img src="data:image/png;base64,[image_placeholder]" alt="Win Rate Plot"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#e686c63f .cell execution_count=1}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=20}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#1feb3ec4 .cell execution_count=2} ``` {.python .cell-code} #only keeping data after 1999 #will create a year col and then trim the data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rugbyDF[‘year’] = rugbyDF[‘date’].str[0:4].astype(int) rugbyDF = rugbyDF[rugbyDF.year &gt; 1998] rugbyDF.dropna(inplace = True) rugbyDF.shape #new shape of dataframe: (1230,12) ```</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=21}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#433bdc4f .cell execution_count=3} ``` {.python .cell-code} #creating variable to track if home or away team won #created weights for win, draw, and loss rugbyDF[“homeWin”] = np.where(rugbyDF[“home_score”] &gt; rugbyDF[“away_score”], 1,0) rugbyDF[“awayWin”] = np.where(rugbyDF[“home_score”] &lt; rugbyDF[“away_score”], 1,0)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#creating a count var to help with num of games played later on rugbyDF[“count”] = 1 ``` :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#9602206b .cell execution_count=4} ``` {.python .cell-code} for cols in rugbyDF.columns: print(cols + “:” + (str)(rugbyDF[cols].dtype))</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#Since there are 2 numerical cols, i can get summary statistics on them #year variable will not be taken into account for summary statistics rugbyDF.describe() ```</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-stdout}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=23}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">```{=html}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.dataframe tbody tr th { vertical-align: top; }</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.dataframe thead th { text-align: right; }</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">We also notice that the home team won ~59.6%* of the games contested.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">*This does not account for games that take place in neutral venues.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#49d0c580 .cell execution_count=5} ``` {.python .cell-code} #create diff df by teams, then find the summary statistics for those teams. unq_hteams = rugbyDF[‘home_team’].unique() unq_ateams = rugbyDF[‘away_team’].unique() unq_teams = np.unique((unq_hteams, unq_ateams)) unq_teams</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#shortens the df to only include awayteam, awaywin or hometeam, homewin rugbyDFH = rugbyDF[[“home_team”,“homeWin”,“count”]] rugbyDFA = rugbyDF[[“away_team”,“awayWin”,“count”]]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#groups the data by team groupedH = rugbyDFH.groupby(‘home_team’).sum() groupedA = rugbyDFA.groupby(‘away_team’).sum()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#renames the axis to the same thing groupedA = groupedA.rename_axis(‘team’) groupedH = groupedH.rename_axis(‘team’)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#find team win percentage by away and home groupedH[“home_win%”] = groupedH[“homeWin”]/groupedH[“count”] <em>100 groupedA[“away_win%”] = groupedA[“awayWin”]/groupedA[“count”] </em>100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#renames count so that they dont clash when merging groupedH = groupedH.rename(columns={‘count’: ‘count_home’}) groupedA = groupedA.rename(columns={‘count’: ‘count_away’})</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#merge the data frames teams_wins = pd.merge(groupedH, groupedA, on=‘team’, how=‘inner’) teams_wins ```</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=24}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">```{=html}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.dataframe tbody tr th { vertical-align: top; }</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.dataframe thead th { text-align: right; }</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">This data frame represents the team wise performance breakdown from 1999-2024.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#5bc85dc8 .cell execution_count=6} ``` {.python .cell-code} fig, ax = plt.subplots()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">y = np.arange(len(unq_teams)) # Team positions width = 0.37 # Bar width</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">plt.barh(y - width/2, teams_wins[“home_win%”], width, label=‘Home Win %’) plt.barh(y + width/2, teams_wins[“away_win%”], width, label=‘Away Win %’) plt.yticks(y, unq_teams)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Add labels and title plt.ylabel(‘Teams’) plt.xlabel(‘Home Win% and Away Win%’) plt.title(‘Home and Away Win Percentage By Team’)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">plt.legend() fig.tight_layout() plt.show() plt.close() ```</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-7-output-1.png" width="662" height="470"> ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">- New Zealand dominates both at home and away. - All teams perform <strong>better at home</strong>, confirming home advantage. - Italy underperforms consistently.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>2. Average Points Scored vs.&nbsp;Conceded</strong> - Teams like <strong>New Zealand</strong> and <strong>South Africa</strong> show high scores with low concession. - <strong>Italy</strong> and <strong>Scotland</strong> concede more than they score, especially in away games.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#e56a9dd0 .cell execution_count=7} ``` {.python .cell-code} #a function to create a scoring dataset def createscoringdataset(rugbyDF):</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#shortens the df to only include awayteam, awaywin or hometeam, homewin rugbyDFH_score = rugbyDF[[“home_team”,“home_score”,“away_score”,“count”]] rugbyDFA_score = rugbyDF[[“away_team”,“away_score”,“home_score”,“count”]]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#renaming away_score and home_score to home_conceded and away_conceded rugbyDFH_score = rugbyDFH_score.rename(columns={‘away_score’: ‘home_conceded’}) rugbyDFA_score = rugbyDFA_score.rename(columns={‘home_score’: ‘away_conceded’})</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#groups the data by team groupedH_score = rugbyDFH_score.groupby(‘home_team’).sum() groupedA_score = rugbyDFA_score.groupby(‘away_team’).sum()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#renames the axis to the same thing groupedH_score = groupedH_score.rename_axis(‘team’) groupedA_score = groupedA_score.rename_axis(‘team’)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#merge the data frames teams_score = pd.merge(groupedH_score, groupedA_score, on=‘team’, how=‘inner’)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#rename count_x and count_y to home_played and away_played teams_score = teams_score.rename(columns={‘count_x’: ‘home_played’, ‘count_y’: ‘away_played’})</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#find team win percentage by away and home teams_score[“home_score_avg”] = teams_score[“home_score”]/teams_score[“home_played”] teams_score[“away_score_avg”] = teams_score[“away_score”]/teams_score[“away_played”]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">teams_score[“home_conceded_avg”] = teams_score[“home_conceded”]/teams_score[“home_played”] teams_score[“away_conceded_avg”] = teams_score[“away_conceded”]/teams_score[“away_played”] return teams_score</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">teams_score = createscoringdataset(rugbyDF) ``` :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#c36439cf .cell execution_count=8} ``` {.python .cell-code} # Create a 2x2 grid of subplots fig, axs = plt.subplots(2, 2) # 2 rows, 2 columns</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Add main title fig.suptitle(“Teamwise Home vs Away Performance”, fontsize=16, y=1.02, # Adjust vertical position (1.0 = top of plot) fontweight=‘bold’)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Plot 1: Home Win % axs[0, 0].barh(unq_teams, teams_wins[“home_win%”], color=‘blue’) axs[0, 0].set_title(‘Home Win Percentage’) axs[0, 0].set_xlabel(‘Win %’)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Plot 2: Away Win % axs[0, 1].barh(unq_teams, teams_wins[“away_win%”], color=‘orange’) axs[0, 1].set_title(‘Away Win Percentage’) axs[0, 1].set_xlabel(‘Win %’)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Plot 3: Home vs Away Comparison (side-by-side) y = range(len(unq_teams)) width = 0.35 axs[1, 0].barh([y - width/2 for y in y], teams_wins[“home_win%”], width, label=‘Home’, color=‘blue’) axs[1, 0].barh([y + width/2 for y in y], teams_wins[“away_win%”], width, label=‘Away’, color=‘orange’) axs[1, 0].set_title(‘Home vs Away Comparison’) axs[1, 0].set_xlabel(‘Win %’) axs[1, 0].set_yticks(y) axs[1, 0].set_yticklabels(unq_teams) axs[1, 0].legend()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Plot 4: Difference (Home - Away) axs[1, 1].barh(unq_teams, teams_wins[“home_win%”] - teams_wins[“away_win%”], color=‘green’) axs[1, 1].set_title(‘Home Advantage (Home - Away)’) axs[1, 1].set_xlabel(‘Win % Difference’)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">plt.tight_layout(rect=[0.00, 0.0, 1, 1]) # Adjusts spacing between subplots plt.subplots_adjust(wspace=0.7, hspace=0.6) plt.show() plt.close() ```</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-9-output-1.png" width="691" height="494"> ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>3. World Cup vs.&nbsp;Regular Match Comparison</strong> - <strong>Ireland and South Africa</strong> maintain strong performance in both contexts. - Some teams <strong>drop significantly in performance during World Cups</strong>, revealing tournament pressure or lack of depth.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#de5a8bca .cell execution_count=9} ``` {.python .cell-code} #creates world cup scoring df</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">worldCupDF = rugbyDF[rugbyDF.world_cup == True] nonWorldCup = rugbyDF[rugbyDF.world_cup == False] wc_scoring = createscoringdataset(worldCupDF) non_wc_scoring = createscoringdataset(nonWorldCup) ``` :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#ba9a4ae2 .cell execution_count=10} ``` {.python .cell-code} # Create a 2x2 grid of subplots fig, axs = plt.subplots(2, 2) # 2 rows, 2 columns</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Add main title fig.suptitle(“World Cup vs Non World Cup Offense and Defense”, fontsize=16, y=1.02, # Adjust vertical position (1.0 = top of plot) fontweight=‘bold’)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Plot 1: World Cup vs Non World Cup home-score-avg y = range(len(unq_teams)) width = 0.35 axs[0, 0].barh([y - width/2 for y in y], wc_scoring[‘home_score_avg’], width, label=‘World Cup’, color=‘#D4AF37’) axs[0, 0].barh([y + width/2 for y in y], non_wc_scoring[‘home_score_avg’], width, label=‘Non World Cup’, color=‘#A6A6A6’) axs[0, 0].set_title(‘Home Points’) axs[0, 0].set_xlabel(‘Avg Points’) axs[0, 0].set_yticks(y) axs[0, 0].set_yticklabels(unq_teams)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Plot 2: World Cup vs Non World Cup away-score-avg axs[1, 0].barh([y - width/2 for y in y], wc_scoring[‘away_score_avg’], width, label=‘World Cup’, color=‘#D4AF37’) axs[1, 0].barh([y + width/2 for y in y], non_wc_scoring[‘away_score_avg’], width, label=‘Non World Cup’, color=‘#A6A6A6’) axs[1, 0].set_title(‘Away Points’) axs[1, 0].set_xlabel(‘Avg Points’) axs[1, 0].set_yticks(y) axs[1, 0].set_yticklabels(unq_teams)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Plot 3: World Cup vs Non World Cup home-conceded-avg axs[0, 1].barh([y - width/2 for y in y], wc_scoring[‘home_conceded_avg’], width, label=‘World Cup’, color=‘#D4AF37’) axs[0, 1].barh([y + width/2 for y in y], non_wc_scoring[‘home_conceded_avg’], width, label=‘Non World Cup’, color=‘#A6A6A6’) axs[0, 1].set_title(‘Home Conceded’) axs[0, 1].set_xlabel(‘Avg Points’) axs[0, 1].set_yticks(y) axs[0, 1].set_yticklabels(unq_teams)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Plot 4: World Cup vs Non World Cup away-conceded-avg axs[1, 1].barh([y - width/2 for y in y], wc_scoring[‘away_conceded_avg’], width, label=‘World Cup’, color=‘#D4AF37’) axs[1, 1].barh([y + width/2 for y in y], non_wc_scoring[‘away_conceded_avg’], width, label=‘Non World Cup’, color=‘#A6A6A6’) axs[1, 1].set_title(‘Away Conceded’) axs[1, 1].set_xlabel(‘Avg Points’) axs[1, 1].set_yticks(y) axs[1, 1].set_yticklabels(unq_teams)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Create invisible artist in center fig.patches.extend([plt.Rectangle((0.5, 0.5), 0.01, 0.01, alpha=0, zorder=100, transform=fig.transFigure)])</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># Create unified legend legend_elements = [ plt.Rectangle((0,0), 1, 1, fc=‘#D4AF37’, ec=‘#B8860B’, lw=1, label=‘WC’), plt.Rectangle((0,0), 1, 1, fc=‘#A6A6A6’, ec=‘#808080’, lw=1, label=‘Non WC’)]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Place legend in absolute center legend = fig.legend(handles=legend_elements, loc=‘center’, bbox_to_anchor=(0.60, 0.49), # Dead center bbox_transform=fig.transFigure, frameon=True, title=‘Match Type’, borderaxespad=1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">plt.tight_layout(rect=[0.07, 0.0, 1, 1]) # Adjusts spacing between subplots plt.subplots_adjust(wspace=0.6, hspace=0.6) plt.show() plt.close() ```</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-11-output-1.png" width="643" height="494"> ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>4. Year-wise Win Percentage Trends</strong> - Shows <strong>consistency and peaks</strong> for contenders like <strong>NZ, RSA, and IRE</strong>. - Allows modeling team form trajectory over time.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#c3516277 .cell execution_count=11} ``` {.python .cell-code} #only kees the year, awayWin, homeWin, and country year_wise = rugbyDF[[“home_team”,“away_team”,“homeWin”,“awayWin”,“count”,“year”]]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#drops the away in homeDf and home in awayDf home_year_wise = year_wise.drop(columns={“away_team”,“awayWin”}) away_year_wise = year_wise.drop(columns={“home_team”,“homeWin”})</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#renames so that both df have the same col names for concatenation home_year_wise = home_year_wise.rename(columns={“home_team”:“team”,“homeWin”:“win”}) away_year_wise = away_year_wise.rename(columns={“away_team”:“team”,“awayWin”:“win”}) year_wise = pd.concat([home_year_wise,away_year_wise], axis=0).reset_index(drop=True)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#groups the data by year and by team and then cerates a win% col for normalized results def getGroupedYW(year_wise): year_wise_grouped = year_wise.groupby([“team”,“year”]).sum() year_wise_grouped[“win_%”] = year_wise_grouped[“win”].div(year_wise_grouped[“count”])*100 year_wise_grouped = year_wise_grouped.drop(columns={“win”,“count”}) return year_wise_grouped</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">year_wise_grouped = getGroupedYW(year_wise) ``` :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#9db6f5ba .cell execution_count=12} ``` {.python .cell-code} def plotYearWiseData(year_wise_grouped): year_wise_grouped_reset = year_wise_grouped.reset_index()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">plt.figure(figsize=(7.5, 5)) sns.lineplot(data=year_wise_grouped_reset, x=‘year’, y=‘win_%’, hue=‘team’, style=‘team’, markers=True, dashes=False)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">plt.title(‘Win Percentage by Team Over the Years’) plt.xlabel(‘Year’) plt.ylabel(‘Win Percentage’) plt.legend(bbox_to_anchor=(1.001, 1), loc=‘upper left’) plt.grid(True) plt.tight_layout() plt.show() plt.close()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">plotYearWiseData(year_wise_grouped) ```</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-13-output-1.png" width="709" height="470"> ::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#59cec613 .cell execution_count=13} ``` {.python .cell-code} # Split teams into two halves half_idx = len(unq_teams) // 2 first_half_teams = unq_teams[:half_idx] second_half_teams = unq_teams[half_idx:]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"># Create filtered DataFrames df_first_half = year_wise[year_wise[‘team’].isin(first_half_teams)] df_second_half = year_wise[year_wise[‘team’].isin(second_half_teams)]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#Checking if the teams do not overlap df_first_half[“team”].unique() df_second_half[“team”].unique() ```</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=32}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#e0f77e70 .cell execution_count=14} ``` {.python .cell-code} #uses the function to create the grouped data first_half_grouped = getGroupedYW(df_first_half)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#plots it plotYearWiseData(first_half_grouped) ```</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-15-output-1.png" width="709" height="470"> ::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#4d312dd0 .cell execution_count=15} ``` {.python .cell-code} #uses the function to create the grouped data second_half_grouped = getGroupedYW(df_second_half)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">#plots it plotYearWiseData(second_half_grouped) ```</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="Preliminary%20Analysis_files/figure-html/cell-16-output-1.png" width="709" height="470"> ::: :::</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="modeling-approach" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-approach"><strong>Modeling Approach</strong></h3>
@@ -248,94 +533,86 @@ On average, the <strong>home team outperforms the away team by ~4.3 points</stro
 <li><p>Sensitivity Analysis: Test how small changes in input variables affect the output (e.g., “What if Feature X varies by ±10%?”).</p></li>
 <li><p>Decision-Making Under Uncertainty: Useful in finance (portfolio risk), healthcare (treatment outcomes), or engineering (system failures).</p></li>
 </ul>
-<div id="03936449" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xgboost <span class="im">as</span> xgb</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<div id="f3148329" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/rugby.csv'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'year'</span>] <span class="op">=</span> df[<span class="st">'date'</span>].<span class="bu">str</span>[<span class="dv">0</span>:<span class="dv">4</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df.year <span class="op">&gt;</span> <span class="dv">1998</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preprocessing</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to only international matches (remove club matches)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>international_matches <span class="op">=</span> df[<span class="st">'competition'</span>].<span class="bu">str</span>.contains(<span class="st">'International|Championship|Nations|World Cup|Test Match'</span>, na<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.loc[international_matches].copy()</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/rugby.csv'</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preprocessing</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to only international matches (remove club matches)</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>international_matches <span class="op">=</span> df[<span class="st">'competition'</span>].<span class="bu">str</span>.contains(<span class="st">'International|Championship|Nations|World Cup|Test Match'</span>, na<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.loc[international_matches].copy()</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature engineering</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create target variable - winner of each match</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'home_score'</span>] <span class="op">&gt;</span> df[<span class="st">'away_score'</span>],</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'home_score'</span>] <span class="op">&lt;</span> df[<span class="st">'away_score'</span>]</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [df[<span class="st">'home_team'</span>], df[<span class="st">'away_team'</span>]]</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'winner'</span>] <span class="op">=</span> np.select(conditions, choices, default<span class="op">=</span><span class="st">'Draw'</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove draws for classification</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.loc[df[<span class="st">'winner'</span>] <span class="op">!=</span> <span class="st">'Draw'</span>].copy()</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode categorical variables</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'home_team_encoded'</span>] <span class="op">=</span> le.fit_transform(df[<span class="st">'home_team'</span>])</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'away_team_encoded'</span>] <span class="op">=</span> le.transform(df[<span class="st">'away_team'</span>])</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'winner_encoded'</span>] <span class="op">=</span> le.transform(df[<span class="st">'winner'</span>])</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Create features based on historical performance</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_team_stats(df):</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    team_stats <span class="op">=</span> defaultdict(<span class="kw">lambda</span>: {<span class="st">'games'</span>: <span class="dv">0</span>, <span class="st">'wins'</span>: <span class="dv">0</span>, <span class="st">'points_for'</span>: <span class="dv">0</span>, <span class="st">'points_against'</span>: <span class="dv">0</span>})</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows():</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        home_team <span class="op">=</span> row[<span class="st">'home_team'</span>]</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        away_team <span class="op">=</span> row[<span class="st">'away_team'</span>]</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        home_score <span class="op">=</span> row[<span class="st">'home_score'</span>]</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        away_score <span class="op">=</span> row[<span class="st">'away_score'</span>]</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update home team stats</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'games'</span>] <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'points_for'</span>] <span class="op">+=</span> home_score</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'points_against'</span>] <span class="op">+=</span> away_score</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'wins'</span>] <span class="op">+=</span> <span class="dv">1</span> <span class="cf">if</span> home_score <span class="op">&gt;</span> away_score <span class="cf">else</span> <span class="dv">0</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update away team stats</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'games'</span>] <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'points_for'</span>] <span class="op">+=</span> away_score</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'points_against'</span>] <span class="op">+=</span> home_score</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'wins'</span>] <span class="op">+=</span> <span class="dv">1</span> <span class="cf">if</span> away_score <span class="op">&gt;</span> home_score <span class="cf">else</span> <span class="dv">0</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> team_stats</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate rolling stats</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>team_stats <span class="op">=</span> calculate_team_stats(df)</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Add features to dataframe</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_features(df, team_stats):</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.copy()</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_win_pct'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'wins'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span>)</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_win_pct'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'wins'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span>)</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_points_avg'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_for'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_points_avg'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_for'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_points_against_avg'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_against'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_points_against_avg'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_against'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add some interaction features</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'win_pct_diff'</span>] <span class="op">=</span> df[<span class="st">'home_win_pct'</span>] <span class="op">-</span> df[<span class="st">'away_win_pct'</span>]</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'points_diff'</span>] <span class="op">=</span> df[<span class="st">'home_points_avg'</span>] <span class="op">-</span> df[<span class="st">'away_points_avg'</span>]</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> add_features(df, team_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature engineering</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create target variable - winner of each match</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'home_score'</span>] <span class="op">&gt;</span> df[<span class="st">'away_score'</span>],</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'home_score'</span>] <span class="op">&lt;</span> df[<span class="st">'away_score'</span>]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [df[<span class="st">'home_team'</span>], df[<span class="st">'away_team'</span>]]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'winner'</span>] <span class="op">=</span> np.select(conditions, choices, default<span class="op">=</span><span class="st">'Draw'</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove draws for classification</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.loc[df[<span class="st">'winner'</span>] <span class="op">!=</span> <span class="st">'Draw'</span>].copy()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode categorical variables</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'home_team_encoded'</span>] <span class="op">=</span> le.fit_transform(df[<span class="st">'home_team'</span>])</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'away_team_encoded'</span>] <span class="op">=</span> le.transform(df[<span class="st">'away_team'</span>])</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>df.loc[:, <span class="st">'winner_encoded'</span>] <span class="op">=</span> le.transform(df[<span class="st">'winner'</span>])</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Create features based on historical performance</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_team_stats(df):</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    team_stats <span class="op">=</span> defaultdict(<span class="kw">lambda</span>: {<span class="st">'games'</span>: <span class="dv">0</span>, <span class="st">'wins'</span>: <span class="dv">0</span>, <span class="st">'points_for'</span>: <span class="dv">0</span>, <span class="st">'points_against'</span>: <span class="dv">0</span>})</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows():</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        home_team <span class="op">=</span> row[<span class="st">'home_team'</span>]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        away_team <span class="op">=</span> row[<span class="st">'away_team'</span>]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        home_score <span class="op">=</span> row[<span class="st">'home_score'</span>]</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        away_score <span class="op">=</span> row[<span class="st">'away_score'</span>]</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update home team stats</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'games'</span>] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'points_for'</span>] <span class="op">+=</span> home_score</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'points_against'</span>] <span class="op">+=</span> away_score</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        team_stats[home_team][<span class="st">'wins'</span>] <span class="op">+=</span> <span class="dv">1</span> <span class="cf">if</span> home_score <span class="op">&gt;</span> away_score <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update away team stats</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'games'</span>] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'points_for'</span>] <span class="op">+=</span> away_score</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'points_against'</span>] <span class="op">+=</span> home_score</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        team_stats[away_team][<span class="st">'wins'</span>] <span class="op">+=</span> <span class="dv">1</span> <span class="cf">if</span> away_score <span class="op">&gt;</span> home_score <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> team_stats</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate rolling stats</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>team_stats <span class="op">=</span> calculate_team_stats(df)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Add features to dataframe</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_features(df, team_stats):</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.copy()</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_win_pct'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'wins'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span>)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_win_pct'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'wins'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span>)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_points_avg'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_for'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_points_avg'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_for'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'home_points_against_avg'</span>] <span class="op">=</span> df[<span class="st">'home_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_against'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'away_points_against_avg'</span>] <span class="op">=</span> df[<span class="st">'away_team'</span>].<span class="bu">apply</span>(</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: team_stats[x][<span class="st">'points_against'</span>] <span class="op">/</span> team_stats[x][<span class="st">'games'</span>] <span class="cf">if</span> team_stats[x][<span class="st">'games'</span>] <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add some interaction features</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'win_pct_diff'</span>] <span class="op">=</span> df[<span class="st">'home_win_pct'</span>] <span class="op">-</span> df[<span class="st">'away_win_pct'</span>]</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    df.loc[:, <span class="st">'points_diff'</span>] <span class="op">=</span> df[<span class="st">'home_points_avg'</span>] <span class="op">-</span> df[<span class="st">'away_points_avg'</span>]</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> add_features(df, team_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f5071cd0" class="cell" data-execution_count="2">
+<div id="86dcda33" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split into features and target</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> [<span class="st">'home_team_encoded'</span>, <span class="st">'away_team_encoded'</span>, </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'home_win_pct'</span>, <span class="st">'away_win_pct'</span>, </span>
@@ -365,10 +642,10 @@ On average, the <strong>home team outperforms the away team by ~4.3 points</stro
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> accuracy_score(y_test, y_pred)</span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Model accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Model accuracy: 0.66</code></pre>
+<pre><code>Model accuracy: 0.78</code></pre>
 </div>
 </div>
-<div id="0a05c716" class="cell" data-execution_count="3">
+<div id="c0cfa608" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo simulation for World Cup prediction</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_world_cup(teams, model, le, n_simulations<span class="op">=</span><span class="dv">1000</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get current top teams (from our dataset)</span></span>
@@ -440,16 +717,16 @@ On average, the <strong>home team outperforms the away team by ~4.3 points</stro
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Predicted 2027 Rugby World Cup Win Probabilities:
-New Zealand: 16.3%
-Australia: 12.9%
-France: 12.7%
-England: 12.1%
-South Africa: 11.2%
-Ireland: 9.5%
-Wales: 8.9%
-Scotland: 7.3%
-Argentina: 6.2%
-Italy: 3.0%</code></pre>
+New Zealand: 16.0%
+England: 13.1%
+France: 12.4%
+South Africa: 11.5%
+Ireland: 11.4%
+Australia: 11.1%
+Wales: 8.4%
+Scotland: 7.9%
+Argentina: 6.3%
+Italy: 1.8%</code></pre>
 </div>
 </div>
 </section>
@@ -460,7 +737,7 @@ Italy: 3.0%</code></pre>
 <li>Fits ordinal nature of outcomes and highlights incremental performance gains.</li>
 </ul>
 <p>Create a worldcup dataset that has each teams outcome for that world cup, elo rating, avg_point_diff, and win_pct for that year.</p>
-<div id="e9e88ac1" class="cell" data-execution_count="4">
+<div id="a14659d9" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">import pandas as pd</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">import numpy as np</span></span>
@@ -493,7 +770,7 @@ Italy: 3.0%</code></pre>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">res = model.fit(method='bfgs')</span></span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">print(res.summary())</span></span>
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>'\nimport pandas as pd\nimport numpy as np\nimport statsmodels.api as sm\nfrom statsmodels.miscmodels.ordinal_model import OrderedModel\n\n# Example DataFrame structure\n# Make sure your dataset includes these columns\n# stage: 1=Group, 2=QF, 3=SF, 4=Final, 5=Winner (ordinal target)\n# win_pct, avg_point_diff, elo_rating, etc. are explanatory variables\n\n# Load your cleaned dataset (replace with actual file or DataFrame)\ndf = pd.read_csv("your_rwc_model_data.csv")\n\n# Drop any rows with missing values (if needed)\ndf.dropna(subset=[\'stage\', \'win_pct\', \'avg_point_diff\', \'elo_rating\'], inplace=True)\n\n# Define features and outcome variable\nX = df[[\'win_pct\', \'avg_point_diff\', \'elo_rating\']]  # Add other variables if needed\ny = df[\'stage\']  # Ordinal outcome\n\n# Create the ordinal logistic regression model\nmodel = OrderedModel(\n    endog=y,\n    exog=X,\n    distr=\'logit\'  # You could also try \'probit\'\n)\n\n# Fit the model\nres = model.fit(method=\'bfgs\')\nprint(res.summary())\n'</code></pre>
 </div>
 </div>

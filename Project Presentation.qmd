@@ -104,17 +104,13 @@ ggplot(data_long, aes(x = reorder(team, value), y = value, fill = metric)) +
 -   Highlights impact of tournament pressure.
 
 # Trends Over Time
--   Year-wise Win % for each team from 1999–2024
--   Shows improvement (Ireland), volatility (Argentina), decline (Australia)
 
--   ![](images/clipboard-1139556712.png)
-------------------------------------------------------------------------------
+![](images/clipboard-1139556712.png){width="412"}
+
+![](images/clipboard-1098090529.png){width="414"}
 
 # Modeling Approach
 
--   **Random Forest + Logistic Regression**
-    -   Binary classification (winner vs non-winner)
-    -   Interpretable and robust
 -   **XGBoost with Monte Carlo Simulations**
     -   Captures non-linearity and interactions
     -   100,000 simulations for probabilistic WC outcome predictions

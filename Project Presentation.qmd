@@ -1,4 +1,5 @@
 # 
+
 ---
 title: "Predicting Rugby World Cup Success"
 author: "Ken Kabeya Aneesh Koppolu"
@@ -23,7 +24,6 @@ execute:
     -   All champions have been tier-one nations.
     -   Use historical data to model success.
 
-
 # Data Overview
 
 -   **Source:** International rugby match dataset (1999–2024)
@@ -33,7 +33,6 @@ execute:
 -   **Variables:**
     -   Scores, home/away teams, competition type, match year
     -   Engineered features: win %, point differential, etc.
-
 
 # Summary Statistics
 
@@ -51,8 +50,6 @@ knitr::kable(data)
 -   Home win rate: **59.6%**
 -   Away win rate: **38.4%**
 -   Home advantage is statistically significant.
-
-
 
 # Win Percentages by Team
 
@@ -74,8 +71,6 @@ ggplot(data, aes(x = reorder(team, home_win))) +
 -   **New Zealand** is dominant both home and away.
 -   All teams perform better at home.
 -   **Italy** underperforms consistently.
-
-
 
 # Scoring vs. Conceding
 
@@ -102,22 +97,18 @@ ggplot(data_long, aes(x = reorder(team, value), y = value, fill = metric)) +
 -   High scoring teams (NZ, RSA) also concede fewer points.
 -   Italy and Scotland struggle defensively.
 
-
-
 # World Cup vs Regular Match Performance
 
 -   **Ireland** and **South Africa** maintain strong form.
 -   Teams like **Scotland** concede more during WC matches.
 -   Highlights impact of tournament pressure.
 
-
-
 # Trends Over Time
-
 -   Year-wise Win % for each team from 1999–2024
 -   Shows improvement (Ireland), volatility (Argentina), decline (Australia)
 
-
+-   ![](images/clipboard-1139556712.png)
+------------------------------------------------------------------------------
 
 # Modeling Approach
 
@@ -128,8 +119,6 @@ ggplot(data_long, aes(x = reorder(team, value), y = value, fill = metric)) +
     -   Captures non-linearity and interactions
     -   100,000 simulations for probabilistic WC outcome predictions
 
-
-
 # 2027 World Cup Predictions
 
 -   **Top 3 Teams**:
@@ -138,23 +127,17 @@ ggplot(data_long, aes(x = reorder(team, value), y = value, fill = metric)) +
     -   **France**: 12.5%
 -   **Dark Horses**: Ireland, South Africa
 
-
-
 # Conclusion
 
 -   Regular fixture performance is a **reliable predictor** of RWC outcomes.
 -   **Key Metrics**: Win %, scoring margin, form trends
 -   Model accuracy: **78%**
 
-
-
 # Future Work
 
 -   Add **Elo ratings** for strength-adjusted comparisons
 -   Integrate **player-level data** and injuries
 -   Develop **interactive dashboards** for prediction scenarios
-
-
 
 # Thank You
 

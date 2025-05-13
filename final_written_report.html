@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aneesh &amp; Ken">
+
+<title>final report</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="final_written_report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="final_written_report_files/libs/quarto-html/quarto.js"></script>
+<script src="final_written_report_files/libs/quarto-html/popper.min.js"></script>
+<script src="final_written_report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="final_written_report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="final_written_report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="final_written_report_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="final_written_report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="final_written_report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="final_written_report_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">final report</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aneesh &amp; Ken </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>FINAL WRITTEN REPORT</p>
+<hr>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction"><strong>Introduction</strong></h2>
+<p>The Rugby World Cup (RWC) is the most prestigious tournament in men’s international rugby, held every four years and featuring the top-performing nations from around the globe. Since its inception in 1987, all winning teams have come from the group of tier-one rugby nations—those with well-established professional structures and a history of competitive success. The World Cup’s high stakes, unique pressure, and knockout format often produce different outcomes from regular international fixtures, yet the path to RWC success may still be written in a team’s performance leading up to the tournament.</p>
+<p>This project seeks to bridge our understanding of regular international performance with World Cup outcomes through a predictive modeling lens. Our guiding research question is:<br>
+&gt; <strong>Can regular fixture performance since 1999 reliably predict World Cup success for tier-one rugby nations?</strong></p>
+<p>We expect that teams with consistently high win rates, dominant scoring margins, and strong rankings (e.g., Elo ratings) leading into a World Cup are more likely to progress further or win the tournament. Based on our model, and consistent with historical trends, we predict that <strong>South Africa (RSA)</strong>, <strong>Ireland (IRE)</strong>, or <strong>New Zealand (NZ)</strong> are the most likely candidates to win the 2027 Rugby World Cup.</p>
+<hr>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data"><strong>Data</strong></h2>
+<section id="data-source-and-collection" class="level3">
+<h3 class="anchored" data-anchor-id="data-source-and-collection"><strong>Data Source and Collection</strong></h3>
+<p>The data for this project was sourced from an international rugby match dataset containing results from test matches played by men’s national teams. The dataset includes <strong>2,783 matches</strong>, of which <strong>1,230</strong> were retained after filtering for: - Matches played <strong>between 1999 and 2024</strong>, inclusive - <strong>Tier-one teams</strong> only - Complete match records (with no missing scores or team names)</p>
+</section>
+<section id="cases-and-variables" class="level3">
+<h3 class="anchored" data-anchor-id="cases-and-variables"><strong>Cases and Variables</strong></h3>
+<p>Each row in the dataset represents a single international rugby match and includes variables such as: - <code>date</code>: Match date - <code>home_team</code>, <code>away_team</code>: Competing teams - <code>home_score</code>, <code>away_score</code>: Points scored by each team - <code>competition</code>: Type of match (e.g., World Cup, Six Nations, etc.) - <code>neutral</code>: Boolean indicator for neutral venue - <code>world_cup</code>: Boolean indicator for whether the match is a World Cup fixture</p>
+</section>
+<section id="data-wrangling-and-feature-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="data-wrangling-and-feature-engineering"><strong>Data Wrangling and Feature Engineering</strong></h3>
+<p>To support our analysis, we created several new variables and tidied the dataset: - Extracted <code>year</code> from the match date for time-series analysis - Created binary indicators: <code>homeWin</code> and <code>awayWin</code> - Calculated <code>count</code> to aid in aggregating match totals - Grouped matches by team to calculate: - <strong>Home and away win percentages</strong> - <strong>Average points scored and conceded (home and away)</strong> - <strong>World Cup vs.&nbsp;regular fixture performance</strong> - Developed year-by-year win percentage timelines for each team</p>
+</section>
+<section id="variables-for-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="variables-for-modeling"><strong>Variables for Modeling</strong></h3>
+<p>We plan to include the following variables in our predictive models: - <strong>Win Percentage (last 2 years before RWC)</strong>: Measures recent performance - <strong>Average Point Differential</strong>: Offensive and defensive strength indicator - <strong>Elo Rating</strong> (if included or computed): Captures opponent-adjusted team strength - <strong>Tournament Flag</strong>: Helps compare regular matches to World Cup fixtures - <strong>Home/Away Advantage</strong>: Quantified through win rates and score differentials</p>
+<p>These variables were chosen for their interpretability and demonstrated relevance in differentiating strong and weak tournament performers.</p>
+<hr>
+</section>
+</section>
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology"><strong>Methodology</strong></h2>
+<section id="research-question" class="level3">
+<h3 class="anchored" data-anchor-id="research-question"><strong>Research Question</strong></h3>
+<p>Our goal is to explore whether consistent performance in international fixtures since 1999 can predict a team’s success at the Rugby World Cup (RWC). We focus on tier-one nations, and based on trends in both regular and tournament data, we aim to forecast the winner of the 2027 RWC. Our preliminary model predicts that <strong>South Africa, Ireland, or New Zealand</strong> are the most likely champions.</p>
+<hr>
+</section>
+<section id="data-overview-and-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-overview-and-cleaning"><strong>Data Overview and Cleaning</strong></h3>
+<p>We used a dataset containing <strong>2,783 international matches</strong>, which was filtered to: - <strong>Matches after 1998</strong>, yielding <strong>1,230 matches</strong>. - <strong>Tier-one teams only</strong>, excluding matches with insufficient data or unclear team tier.</p>
+<p>Cleaning Steps: - Extracted <strong>year</strong> from match dates for temporal analysis. - Created binary flags for <strong>homeWin</strong> and <strong>awayWin</strong>. - Dropped rows with missing values. - Created a <strong>“count”</strong> variable to aggregate matches played per team.</p>
+<hr>
+</section>
+<section id="feature-engineering-and-wrangling" class="level3">
+<h3 class="anchored" data-anchor-id="feature-engineering-and-wrangling"><strong>Feature Engineering and Wrangling</strong></h3>
+<p>We created several new variables from existing match data: - <strong>Home/Away Win Percentages</strong>: Calculated by aggregating match results per team. - <strong>Average Points Scored and Conceded</strong>: For both World Cup and non-World Cup matches. - <strong>World Cup Match Flag</strong>: To compare regular vs.&nbsp;tournament performance. - <strong>Yearly Win Percentage</strong>: A normalized view of performance over time per team.</p>
+<blockquote class="blockquote">
+<p>Code implementation used pandas and NumPy, with seaborn and matplotlib for plotting.</p>
+</blockquote>
+<hr>
+</section>
+<section id="exclusions" class="level3">
+<h3 class="anchored" data-anchor-id="exclusions"><strong>Exclusions</strong></h3>
+<p>We excluded: - All matches involving <strong>non-tier-one nations</strong>. - Matches with <strong>missing scores</strong> or unclear venues. - Non-competitive matches that could skew performance metrics (e.g., experimental squads).</p>
+<hr>
+</section>
+<section id="summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics"><strong>Summary Statistics</strong></h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Mean</th>
+<th>Std Dev</th>
+<th>Min</th>
+<th>Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Home Score</td>
+<td>25.07</td>
+<td>13.15</td>
+<td>0</td>
+<td>101</td>
+</tr>
+<tr class="even">
+<td>Away Score</td>
+<td>20.78</td>
+<td>11.38</td>
+<td>0</td>
+<td>68</td>
+</tr>
+<tr class="odd">
+<td>Home Win Rate</td>
+<td>59.6%</td>
+<td>—</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Away Win Rate</td>
+<td>38.4%</td>
+<td>—</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Year</td>
+<td>2011.5</td>
+<td>7.2</td>
+<td>1999</td>
+<td>2024</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observation</strong>:<br>
+On average, the <strong>home team outperforms the away team by ~4.3 points</strong>. The home win rate is significantly higher across all teams.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">### <strong>Key Visualizations</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>1. Home and Away Win Rates by Team</strong> <img src="data:image/png;base64,[image_placeholder]" alt="Win Rate Plot"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#c7127b19 .cell execution_count=1}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=21}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">We also notice that the home team won ~59.6%* of the games contested.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">*This does not account for games that take place in neutral venues.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#5c737a6b .cell execution_count=4}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=24}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">```{=html}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.dataframe tbody tr th { vertical-align: top; }</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.dataframe thead th { text-align: right; }</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">This data frame represents the team wise performance breakdown from 1999-2024.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#09417bb9 .cell execution_count=5}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-6-output-1.png" width="661" height="468"> ::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">- New Zealand dominates both at home and away. - All teams perform <strong>better at home</strong>, confirming home advantage. - Italy underperforms consistently.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>2. Average Points Scored vs.&nbsp;Conceded</strong> - Teams like <strong>New Zealand</strong> and <strong>South Africa</strong> show high scores with low concession. - <strong>Italy</strong> and <strong>Scotland</strong> concede more than they score, especially in away games.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#62d12b37 .cell execution_count=7}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-8-output-1.png" width="692" height="492"> ::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>3. World Cup vs.&nbsp;Regular Match Comparison</strong> - <strong>Ireland and South Africa</strong> maintain strong performance in both contexts. - Some teams <strong>drop significantly in performance during World Cups</strong>, revealing tournament pressure or lack of depth.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#9a341081 .cell execution_count=9}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-10-output-1.png" width="643" height="492"> ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>4. Year-wise Win Percentage Trends</strong> - Shows <strong>consistency and peaks</strong> for contenders like <strong>NZ, RSA, and IRE</strong>. - Allows modeling team form trajectory over time.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#723352f8 .cell execution_count=11}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-12-output-1.png" width="709" height="468"> ::: :::</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#35a5aeaf .cell execution_count=12}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display execution_count=32}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {#3877aa02 .cell execution_count=13}</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-14-output-1.png" width="709" height="468"> ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#450fb30c .cell execution_count=14}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-display} <img src="final_written_report_files/figure-html/cell-15-output-1.png" width="709" height="468"> ::: :::</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="modeling-approach" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-approach"><strong>Modeling Approach</strong></h3>
+<hr>
+<section id="xgboost-classifier-with-monte-carlo-simulations" class="level4">
+<h4 class="anchored" data-anchor-id="xgboost-classifier-with-monte-carlo-simulations"><strong>XGBoost CLassifier with Monte Carlo Simulations</strong></h4>
+<p>XGBoost (Extreme Gradient Boosting) is a highly efficient and scalable machine learning algorithm, especially for structured/tabular data. Its advantages include:</p>
+<ul>
+<li><p>High Predictive Accuracy: Often outperforms other algorithms (like logistic regression, random forests, or neural networks) on structured datasets.</p></li>
+<li><p>Handles Non-Linearity &amp; Complex Relationships: Captures intricate patterns in data that simpler models might miss.</p></li>
+<li><p>Feature Importance: Provides insights into which variables most influence predictions.</p></li>
+<li><p>Robust to Overfitting: Includes regularization (L1/L2) and early stopping.</p></li>
+<li><p>Works Well with Imbalanced Data: Can handle classification tasks where one class is rare (e.g., fraud detection).</p></li>
+</ul>
+<p>Monte Carlo (MC) simulations are used to model uncertainty and probabilistic outcomes by running thousands of random simulations. When combined with XGBoost, they help:</p>
+<ul>
+<li><p>Quantify Uncertainty: XGBoost gives a point prediction (e.g., probability of an event), but MC can simulate how reliable that prediction is under varying conditions.</p></li>
+<li><p>Risk Assessment: If inputs have randomness (e.g., stock prices, sensor noise), MC can propagate this uncertainty through the XGBoost model.</p></li>
+<li><p>Sensitivity Analysis: Test how small changes in input variables affect the output (e.g., “What if Feature X varies by ±10%?”).</p></li>
+<li><p>Decision-Making Under Uncertainty: Useful in finance (portfolio risk), healthcare (treatment outcomes), or engineering (system failures).</p></li>
+</ul>
+<p><strong>Full Model Performance</strong></p>
+<div id="a3fcb056" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-stdout">
+<pre><code>Model accuracy: 0.78
+Balanced Accuracy: 0.5811479833126691</code></pre>
+</div>
+</div>
+<div id="69bd8e6c" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Predicted 2027 Rugby World Cup Win Probabilities:
+New Zealand: 16.9%
+France: 13.7%
+England: 13.6%
+Australia: 10.9%
+South Africa: 10.5%
+Ireland: 9.5%
+Wales: 8.5%
+Scotland: 7.7%
+Argentina: 6.5%
+Italy: 2.2%</code></pre>
+</div>
+</div>
+<p>XGBoost provides these importance types by default:</p>
+<ul>
+<li><p>weight: The number of times a feature appears in a tree</p></li>
+<li><p>gain: The average gain of splits which use the feature</p></li>
+<li><p>cover: The average coverage of splits which use the feature</p></li>
+</ul>
+<div id="c064aa90" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+weight importance:
+{'home_team_encoded': 1681.0, 'away_team_encoded': 1984.0, 'home_win_pct': 1142.0, 'away_win_pct': 1326.0, 'home_points_avg': 125.0, 'away_points_avg': 281.0, 'home_points_against_avg': 192.0, 'away_points_against_avg': 141.0, 'win_pct_diff': 632.0, 'points_diff': 221.0}</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_written_report_files/figure-html/cell-19-output-2.png" width="668" height="468" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+gain importance:
+{'home_team_encoded': 1.8732664585113525, 'away_team_encoded': 1.1150813102722168, 'home_win_pct': 2.4183380603790283, 'away_win_pct': 1.7836586236953735, 'home_points_avg': 1.166833758354187, 'away_points_avg': 1.0735559463500977, 'home_points_against_avg': 5.713682651519775, 'away_points_against_avg': 4.892234802246094, 'win_pct_diff': 0.632270097732544, 'points_diff': 0.37295353412628174}</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_written_report_files/figure-html/cell-19-output-4.png" width="644" height="468" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+cover importance:
+{'home_team_encoded': 32.03656005859375, 'away_team_encoded': 25.857345581054688, 'home_win_pct': 35.779781341552734, 'away_win_pct': 31.638147354125977, 'home_points_avg': 31.142969131469727, 'away_points_avg': 26.787860870361328, 'home_points_against_avg': 47.26271057128906, 'away_points_against_avg': 55.701866149902344, 'win_pct_diff': 18.252384185791016, 'points_diff': 34.62422180175781}</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_written_report_files/figure-html/cell-19-output-6.png" width="675" height="468" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Weight is the number of times that feature appears in a tree</strong> Interpretation</p>
+<ul>
+<li>win_pct_diff was used in 632 splits across all trees.</li>
+</ul>
+<p>This is simple and easy to compute but it doesn’t account for the overall impact towards the model performance. The number of times a feature appears does not explain how much the model improves by.</p>
+<p><strong>Gain is the average improvement in the model accuracy (Gini impurity for classification)</strong> Interpretation</p>
+<ul>
+<li>A gain of 1.78 means away_win_pct, on average, improves class separation by 1.78 units per split.</li>
+</ul>
+<p>Directly measures feature usefulness, but it can be biased toward continuous features (they often allow more fine-grained splits).</p>
+<p><strong>Cover is the average number of samples impacted by splits using a feature</strong> Interpretation</p>
+<ul>
+<li>win_pct_diff 18.25238 means splits using this feature affect ~18.25238 samples on average.</li>
+</ul>
+<p>Cover helps detect broadly influential features, but it doesn’t directly measure predictive power.</p>
+<div id="6eff86a6" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-stdout">
+<pre><code>Refined Model accuracy: 0.77
+Balanced Accuracy: 0.5781176802823662</code></pre>
+</div>
+</div>
+<p>We can see that the model performs almost identically to the one from before. Since it is simpler and the performance is nearly identical, we will go ahead and perform cross validation to find optimal hyper-parameters.</p>
+<div id="9d86611e" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-stdout">
+<pre><code>Best params: {'learning_rate': 0.01, 'max_depth': 5, 'n_estimators': 50}</code></pre>
+</div>
+</div>
+<div id="445a7091" class="cell" data-execution_count="21">
+<div class="cell-output cell-output-stdout">
+<pre><code>XGBClassifier(base_score=None, booster=None, callbacks=None,
+              colsample_bylevel=None, colsample_bynode=None,
+              colsample_bytree=None, device=None, early_stopping_rounds=None,
+              enable_categorical=False, eval_metric=None, feature_types=None,
+              gamma=None, grow_policy=None, importance_type=None,
+              interaction_constraints=None, learning_rate=0.01, max_bin=None,
+              max_cat_threshold=None, max_cat_to_onehot=None,
+              max_delta_step=None, max_depth=5, max_leaves=None,
+              min_child_weight=None, missing=nan, monotone_constraints=None,
+              multi_strategy=None, n_estimators=50, n_jobs=None, num_class=10,
+              num_parallel_tree=None, ...)
+Optimized Model accuracy: 0.77
+Balanced Accuracy: 0.5738474739748085</code></pre>
+</div>
+</div>
+<p>The best params do not make much of a difference as the accuracy and balanced accuracy stayed pretty much the same.</p>
+<p>Revised Monte Carlo Simulations definition with world cup stages</p>
+<div id="8e566269" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Running enhanced simulation...
+
+Predicted 2027 Rugby World Cup Win Probabilities with Optimized Model:
+England: 15.2%
+South Africa: 11.3%
+Australia: 10.9%
+Argentina: 9.6%
+Wales: 9.4%
+Scotland: 9.3%
+Italy: 8.8%
+France: 8.7%
+Ireland: 8.6%
+New Zealand: 8.3%</code></pre>
+</div>
+</div>
+<p>Interestingly, after creating a model that prioritizes the top features while avoiding comprimising performance, New Zealand now slips to 7th. This could be because of the way the features appear in the forest and how those features favor England.</p>
+<p>Maybe the next steps could be uncovering the exact reasons as to this change.</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

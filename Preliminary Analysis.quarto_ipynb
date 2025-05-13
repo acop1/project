@@ -99,7 +99,7 @@
         "**1. Home and Away Win Rates by Team**\n",
         "<img src=\"data:image/png;base64,[image_placeholder]\" alt=\"Win Rate Plot\" />\n"
       ],
-      "id": "3c45a302"
+      "id": "9ad62455"
     },
     {
       "cell_type": "code",
@@ -119,7 +119,7 @@
         "rugbyDF.shape\n",
         "#(2783, 11)"
       ],
-      "id": "358f5c50",
+      "id": "78fd7f42",
       "execution_count": null,
       "outputs": []
     },
@@ -136,7 +136,7 @@
         "rugbyDF.shape\n",
         "#new shape of dataframe: (1230,12)"
       ],
-      "id": "893c50a1",
+      "id": "0f821c2c",
       "execution_count": null,
       "outputs": []
     },
@@ -152,7 +152,7 @@
         "#creating a count var to help with num of games played later on\n",
         "rugbyDF[\"count\"] = 1"
       ],
-      "id": "fe15def5",
+      "id": "751130f5",
       "execution_count": null,
       "outputs": []
     },
@@ -167,7 +167,7 @@
         "#year variable will not be taken into account for summary statistics\n",
         "rugbyDF.describe()"
       ],
-      "id": "a6ce6b2a",
+      "id": "29309323",
       "execution_count": null,
       "outputs": []
     },
@@ -181,7 +181,7 @@
         "\n",
         "\\*This does not account for games that take place in neutral venues.\n"
       ],
-      "id": "4dd7c545"
+      "id": "0d6568a3"
     },
     {
       "cell_type": "code",
@@ -217,7 +217,7 @@
         "teams_wins = pd.merge(groupedH, groupedA, on='team', how='inner')\n",
         "teams_wins"
       ],
-      "id": "eb1ba8b0",
+      "id": "069e4e55",
       "execution_count": null,
       "outputs": []
     },
@@ -227,7 +227,7 @@
       "source": [
         "This data frame represents the team wise performance breakdown from 1999-2024.\n"
       ],
-      "id": "ccc5c585"
+      "id": "cc988a39"
     },
     {
       "cell_type": "code",
@@ -252,7 +252,7 @@
         "plt.show()\n",
         "plt.close()"
       ],
-      "id": "1cc22c7c",
+      "id": "8c98e98c",
       "execution_count": null,
       "outputs": []
     },
@@ -268,7 +268,7 @@
         "- Teams like **New Zealand** and **South Africa** show high scores with low concession.\n",
         "- **Italy** and **Scotland** concede more than they score, especially in away games.\n"
       ],
-      "id": "1a1e1d77"
+      "id": "ddd07eed"
     },
     {
       "cell_type": "code",
@@ -309,7 +309,7 @@
         "\n",
         "teams_score = createscoringdataset(rugbyDF)"
       ],
-      "id": "1d57cf74",
+      "id": "9e704548",
       "execution_count": null,
       "outputs": []
     },
@@ -357,7 +357,7 @@
         "plt.show()\n",
         "plt.close()"
       ],
-      "id": "201744af",
+      "id": "90cf814f",
       "execution_count": null,
       "outputs": []
     },
@@ -369,7 +369,7 @@
         "- **Ireland and South Africa** maintain strong performance in both contexts.\n",
         "- Some teams **drop significantly in performance during World Cups**, revealing tournament pressure or lack of depth.\n"
       ],
-      "id": "539385ee"
+      "id": "d89be19f"
     },
     {
       "cell_type": "code",
@@ -382,7 +382,7 @@
         "wc_scoring = createscoringdataset(worldCupDF)\n",
         "non_wc_scoring = createscoringdataset(nonWorldCup)"
       ],
-      "id": "e78e8da3",
+      "id": "cd891a14",
       "execution_count": null,
       "outputs": []
     },
@@ -461,7 +461,7 @@
         "plt.show()\n",
         "plt.close()"
       ],
-      "id": "c2c830e3",
+      "id": "88700fce",
       "execution_count": null,
       "outputs": []
     },
@@ -473,7 +473,7 @@
         "- Shows **consistency and peaks** for contenders like **NZ, RSA, and IRE**.\n",
         "- Allows modeling team form trajectory over time.\n"
       ],
-      "id": "aea48eb1"
+      "id": "d245aef3"
     },
     {
       "cell_type": "code",
@@ -500,7 +500,7 @@
         "\n",
         "year_wise_grouped = getGroupedYW(year_wise)"
       ],
-      "id": "7e7018b6",
+      "id": "916e56dc",
       "execution_count": null,
       "outputs": []
     },
@@ -526,7 +526,7 @@
         "\n",
         "plotYearWiseData(year_wise_grouped)"
       ],
-      "id": "c3eba4a8",
+      "id": "c87c2cef",
       "execution_count": null,
       "outputs": []
     },
@@ -536,7 +536,7 @@
       "source": [
         "Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.\n"
       ],
-      "id": "a3670cdb"
+      "id": "5a87dfe2"
     },
     {
       "cell_type": "code",
@@ -555,7 +555,7 @@
         "df_first_half[\"team\"].unique()\n",
         "df_second_half[\"team\"].unique()"
       ],
-      "id": "2501dd63",
+      "id": "03eda41f",
       "execution_count": null,
       "outputs": []
     },
@@ -569,7 +569,7 @@
         "#plots it\n",
         "plotYearWiseData(first_half_grouped)"
       ],
-      "id": "548f7e60",
+      "id": "b61e52c9",
       "execution_count": null,
       "outputs": []
     },
@@ -579,7 +579,7 @@
       "source": [
         "In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.\n"
       ],
-      "id": "d8774e18"
+      "id": "16b6459c"
     },
     {
       "cell_type": "code",
@@ -591,7 +591,7 @@
         "#plots it\n",
         "plotYearWiseData(second_half_grouped)"
       ],
-      "id": "0b18a7df",
+      "id": "3a73a52d",
       "execution_count": null,
       "outputs": []
     },
@@ -644,7 +644,7 @@
         "\n",
         "- Decision-Making Under Uncertainty: Useful in finance (portfolio risk), healthcare (treatment outcomes), or engineering (system failures).\n"
       ],
-      "id": "1396958e"
+      "id": "b0a57f43"
     },
     {
       "cell_type": "code",
@@ -728,7 +728,7 @@
         "\n",
         "df = add_features(df, team_stats)"
       ],
-      "id": "2de84c37",
+      "id": "e60b4d9a",
       "execution_count": null,
       "outputs": []
     },
@@ -765,7 +765,7 @@
         "accuracy = accuracy_score(y_test, y_pred)\n",
         "print(f\"Model accuracy: {accuracy:.2f}\")"
       ],
-      "id": "7300ea4b",
+      "id": "2250f6ad",
       "execution_count": null,
       "outputs": []
     },
@@ -834,7 +834,7 @@
         "    return win_pct\n",
         "\n",
         "# Run simulation\n",
-        "win_probabilities = simulate_world_cup(le.classes_, model, le, n_simulations=100000)\n",
+        "win_probabilities = simulate_world_cup(le.classes_, model, le, n_simulations=1000)\n",
         "\n",
         "# Display results\n",
         "print(\"\\nPredicted 2027 Rugby World Cup Win Probabilities:\")\n",
@@ -842,16 +842,17 @@
         "    if prob > 0:\n",
         "        print(f\"{team}: {prob:.1f}%\")"
       ],
-      "id": "633f8655",
+      "id": "7ad5a640",
       "execution_count": null,
       "outputs": []
     }
   ],
   "metadata": {
     "kernelspec": {
-      "display_name": "Python 3",
+      "name": "python3",
       "language": "python",
-      "name": "python3"
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/acop/anaconda3/share/jupyter/kernels/python3"
     }
   },
   "nbformat": 4,

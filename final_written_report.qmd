@@ -1,12 +1,11 @@
 ---
-title: "Premliminary Analysis"
-author: "Ken Kabeya & Aneesh Koppolu"
-format:
-  pdf:
-    document: default
-    toc: true
+title: "final report"
+author: "Aneesh & Ken"
+format: html
+editor: visual
 ---
-Preliminary Analysis
+
+FINAL WRITTEN REPORT
 
 ------------------------------------------------------------------------
 
@@ -93,7 +92,8 @@ On average, the **home team outperforms the away team by \~4.3 points**. The hom
 <img src="data:image/png;base64,[image_placeholder]" alt="Win Rate Plot" />
 
 
-```{python import_data}
+```{python import_data echo=FALSE}
+#| echo: false
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -109,19 +109,19 @@ rugbyDF.shape
 #(2783, 11)
 ```
 
-```{python trimming_data}
-
+```{python trimming_data echo=FALSE}
+#| echo: false
 #only keeping data after 1999
 #will create a year col and then trim the data
 
 rugbyDF['year'] = rugbyDF['date'].str[0:4].astype(int)
 rugbyDF = rugbyDF[rugbyDF.year > 1998]
 rugbyDF.dropna(inplace = True)
-rugbyDF.shape
 #new shape of dataframe: (1230,12)
 ```
 
-```{python create_homeWin}
+```{python create_homeWin echo=FALSE}
+#| echo: false
 #creating variable to track if home or away team won
 #created weights for win, draw, and loss
 rugbyDF["homeWin"] = np.where(rugbyDF["home_score"] > rugbyDF["away_score"], 1,0)
@@ -132,28 +132,18 @@ rugbyDF["count"] = 1
 
 ```
 
-```{python col_types}
-
-for cols in rugbyDF.columns:
-  print(cols + ": " + (str)(rugbyDF[cols].dtype))
-
-#Since there are 2 numerical cols, i can get summary statistics on them
-#year variable will not be taken into account for summary statistics
-rugbyDF.describe()
-```
-
 We can observe that the mean points scored by the home team was approximately 4.2 higher than the away team. All major quadrants have higher points for home_score than away_score, and the std is also greater.
 
 We also notice that the home team won \~59.6%\* of the games contested.
 
 \*This does not account for games that take place in neutral venues.
 
-```{python win%}
+```{python win% echo=FALSE}
+#| echo: false
 #create diff df by teams, then find the summary statistics for those teams.
 unq_hteams = rugbyDF['home_team'].unique()
 unq_ateams = rugbyDF['away_team'].unique()
 unq_teams = np.unique((unq_hteams, unq_ateams))
-unq_teams
 
 #shortens the df to only include awayteam, awaywin or hometeam, homewin
 rugbyDFH = rugbyDF[["home_team","homeWin","count"]]
@@ -183,7 +173,8 @@ teams_wins
 
 This data frame represents the team wise performance breakdown from 1999-2024.
 
-```{python team_win_plots}
+```{python team_win_plots echo=FALSE}
+#| echo: false
 fig, ax = plt.subplots()
 
 y = np.arange(len(unq_teams))  # Team positions
@@ -212,7 +203,8 @@ plt.close()
 - Teams like **New Zealand** and **South Africa** show high scores with low concession.
 - **Italy** and **Scotland** concede more than they score, especially in away games.
 
-```{python team_scoring}
+```{python team_scoring echo=FALSE}
+#| echo: false
 #a function to create a scoring dataset
 def createscoringdataset(rugbyDF):
   
@@ -249,8 +241,8 @@ def createscoringdataset(rugbyDF):
 teams_score = createscoringdataset(rugbyDF)
 ```
 
-```{python team_scoring_plots}
-
+```{python team_scoring_plots echo=FALSE}
+#| echo: false
 # Create a 2x2 grid of subplots
 fig, axs = plt.subplots(2, 2)  # 2 rows, 2 columns
 
@@ -296,7 +288,8 @@ plt.close()
 - **Ireland and South Africa** maintain strong performance in both contexts.
 - Some teams **drop significantly in performance during World Cups**, revealing tournament pressure or lack of depth.
 
-```{python worldcup_dataset}
+```{python worldcup_dataset echo=FALSE}
+#| echo: false
 #creates world cup scoring df
 
 worldCupDF = rugbyDF[rugbyDF.world_cup == True]
@@ -306,8 +299,8 @@ non_wc_scoring = createscoringdataset(nonWorldCup)
 
 ```
 
-```{python worldcup_vs_non-worldcup}
-
+```{python worldcup_vs_non-worldcup echo=FALSE}
+#| echo: false
 # Create a 2x2 grid of subplots
 fig, axs = plt.subplots(2, 2)  # 2 rows, 2 columns
 
@@ -384,7 +377,8 @@ plt.close()
 - Shows **consistency and peaks** for contenders like **NZ, RSA, and IRE**.
 - Allows modeling team form trajectory over time.
 
-```{python year_wise_wins}
+```{python year_wise_wins echo=FALSE}
+#| echo: false
 #only kees the year, awayWin, homeWin, and country
 year_wise = rugbyDF[["home_team","away_team","homeWin","awayWin","count","year"]]
 
@@ -407,7 +401,8 @@ def getGroupedYW(year_wise):
 year_wise_grouped = getGroupedYW(year_wise)
 ```
 
-```{python year_wise_plot_function}
+```{python year_wise_plot_function echo=FALSE}
+#| echo: false
 def plotYearWiseData(year_wise_grouped):
   year_wise_grouped_reset = year_wise_grouped.reset_index()
 
@@ -429,7 +424,8 @@ plotYearWiseData(year_wise_grouped)
 
 Since this plot is chaotic, I will cut down on the number of countries plotted. 2 plots with 5 countries on each.
 
-```{python plot_split}
+```{python plot_split echo=FALSE}
+#| echo: false
 # Split teams into two halves
 half_idx = len(unq_teams) // 2
 first_half_teams = unq_teams[:half_idx]
@@ -444,7 +440,8 @@ df_first_half["team"].unique()
 df_second_half["team"].unique()
 ```
 
-```{python first_half_lot}
+```{python first_half_lot echo=FALSE}
+#| echo: false
 #uses the function to create the grouped data
 first_half_grouped = getGroupedYW(df_first_half)
 
@@ -454,7 +451,8 @@ plotYearWiseData(first_half_grouped)
 
 In this breakdown of ARG, AUS, ENG, FRA, and IRE we can see that Australia starts out really strong at the turn of the millennium and slowly starts to regress. 2023 saw them experience their worst year with no wins to show for. IRE and FRA have been the two teams that continue to improve on average. ENG and ARG are the two wildcard teams that can be either really good or really bad; they are wildly unpredictable.
 
-```{python second_half_plot}
+```{python second_half_plot echo=FALSE}
+#| echo: false
 #uses the function to create the grouped data
 second_half_grouped = getGroupedYW(df_second_half)
 
@@ -465,22 +463,6 @@ plotYearWiseData(second_half_grouped)
 ---
 
 ### **Modeling Approach**
-
-#### **Random Forest Classifier**
-- Used for **binary classification**: World Cup Winner vs. Non-Winner.
-- Captures **non-linear patterns** and **interaction effects**.
-- Feature importance helps identify key performance indicators.
-
-#### **Time-Series Analysis**
-- Year-wise win percentage trends inform about **form, slumps, and growth**.
-- Useful for **pre-tournament prediction**, especially for 2027.
-
----
-
-### **Why These Methods?**
-- **Logistic regression** works well with ordered categories.
-- **Random forests** are robust to outliers and handle complex variable relationships.
-- **Visualization-backed wrangling** ensured each model was driven by interpretable and meaningful variables.
 
 ---
 
@@ -507,7 +489,9 @@ Monte Carlo (MC) simulations are used to model uncertainty and probabilistic out
 
 - Decision-Making Under Uncertainty: Useful in finance (portfolio risk), healthcare (treatment outcomes), or engineering (system failures).
 
-```{python model-prediction}
+**Full Model Performance**
+```{python model-prediction echo=FALSE}
+#| echo: false
 # Load the dataset
 df = pd.read_csv('data/rugby.csv')
 df['year'] = df['date'].str[0:4].astype(int)
@@ -588,7 +572,9 @@ df = add_features(df, team_stats)
 
 ```
 
-```{python train-test-xgboost}
+```{python train-test-xgboost echo=FALSE}
+#| echo: false
+from sklearn.metrics import balanced_accuracy_score
 
 # Split into features and target
 feature_cols = ['home_team_encoded', 'away_team_encoded', 
@@ -618,11 +604,13 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Model accuracy: {accuracy:.2f}")
+#print("Balanced Accuracy accounts for the domination by the top tier 1 teams")
+print("Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred))
 
 ```
 
-```{python monte-carlo-xgboost}
-
+```{python monte-carlo-xgboost echo=FALSE}
+#| echo: false
 # Monte Carlo simulation for World Cup prediction
 def simulate_world_cup(teams, model, le, n_simulations=1000):
     # Get current top teams (from our dataset)
@@ -693,3 +681,190 @@ for team, prob in sorted(win_probabilities.items(), key=lambda x: x[1], reverse=
         print(f"{team}: {prob:.1f}%")
 ```        
 
+XGBoost provides these importance types by default:
+
+- weight: The number of times a feature appears in a tree
+
+- gain: The average gain of splits which use the feature
+
+- cover: The average coverage of splits which use the feature
+
+```{python feature-importance echo=FALSE}
+#| echo: false
+# For 'gain' or 'cover' importance
+importance_types = ['weight', 'gain', 'cover']
+for imp_type in importance_types:
+    print(f"\n{imp_type} importance:")
+    importance = model.get_booster().get_score(importance_type=imp_type)
+    print(importance)
+    
+    # Plot
+    xgb.plot_importance(model, importance_type=imp_type)
+    plt.title(f'{imp_type} importance')
+    plt.tight_layout()
+    plt.show()
+```
+**Weight is the number of times that feature appears in a tree**
+Interpretation
+
+- win_pct_diff was used in 632 splits across all trees.
+
+This is simple and easy to compute but it doesn't account for the overall impact towards the model performance. The number of times a feature appears does not explain how much the model improves by.
+
+
+**Gain is the average improvement in the model accuracy (Gini impurity for classification)**
+Interpretation
+
+- A gain of 1.78 means away_win_pct, on average, improves class separation by 1.78 units per split.
+
+Directly measures feature usefulness, but it can be biased toward continuous features (they often allow more fine-grained splits).
+
+**Cover is the average number of samples impacted by splits using a feature**
+Interpretation
+
+- win_pct_diff 18.25238 means splits using this feature affect ~18.25238 samples on average.
+
+Cover helps detect broadly influential features, but it doesn’t directly measure predictive power.
+
+```{python feature-selection echo=FALSE}
+#| echo: false
+#will use the top 5 gain features for the revised model
+top_features = ['home_points_against_avg', 'away_points_against_avg', 'home_win_pct','home_team_encoded','away_win_pct']  
+X_train_top = X_train[top_features]
+X_test_top = X_test[top_features]
+
+# Re-train the model
+model_top = xgb.XGBClassifier(
+  objective='multi:softprob',
+    num_class=len(le.classes_),
+    n_estimators=100,
+    max_depth=5,
+    learning_rate=0.1,
+    random_state=42
+)
+model_top.fit(X_train_top, y_train)
+
+# Evaluate model
+y_pred_top = model_top.predict(X_test_top)
+accuracy1 = accuracy_score(y_test, y_pred_top)
+print(f"Refined Model accuracy: {accuracy1:.2f}")
+print("Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred_top))
+
+```
+
+We can see that the model performs almost identically to the one from before. Since it is simpler and the performance is nearly identical, we will go ahead and perform cross validation to find optimal hyper-parameters.
+
+```{python echo=FALSE}
+#| echo: false
+from sklearn.model_selection import GridSearchCV
+
+params = {
+    'max_depth': [ 5],          # Control tree complexity
+    'learning_rate': [0.01], # Smaller rates for high-gain features
+    'n_estimators': [50],   # More trees to leverage strong features
+}
+
+grid = GridSearchCV(model_top, params, cv=2, scoring='f1_macro')
+grid.fit(X_train_top, y_train)
+print(f"Best params: {grid.best_params_}")
+```
+```{python best-fit-model echo=FALSE}
+#| echo: false
+# The best model is already refit and stored in `grid.best_estimator_`
+best_model = grid.best_estimator_
+print(best_model)
+# Evaluate on test data
+y_pred_best = best_model.predict(X_test_top)
+accuracy2 = accuracy_score(y_test, y_pred_best)
+print(f"Optimized Model accuracy: {accuracy2:.2f}")
+print("Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred_best))
+```
+The best params do not make much of a difference as the accuracy and balanced accuracy stayed pretty much the same.
+
+Revised Monte Carlo Simulations definition with world cup stages
+```{python echo=FALSE}
+#| echo: false
+def enhanced_world_cup_simulation(teams, model, le, team_stats, n_simulations=1000):
+    win_counts = {team: 0 for team in teams}
+    
+    for _ in range(n_simulations):
+        # Simulate a more realistic tournament structure
+        quarterfinalists = random.sample(teams, 8)
+        
+        # Simulate knockout stages - FIXED to use model predictions
+        semifinalists = []
+        for i in range(0, 8, 2):
+            team1, team2 = quarterfinalists[i], quarterfinalists[i+1]
+            winner = predict_winner(team1, team2, model, le, team_stats)
+            semifinalists.append(winner)
+        
+        finalists = []
+        for i in range(0, 4, 2):
+            team1, team2 = semifinalists[i], semifinalists[i+1]
+            winner = predict_winner(team1, team2, model, le, team_stats)
+            finalists.append(winner)
+        
+        # Predict final match
+        team1, team2 = finalists
+        winner = predict_winner(team1, team2, model, le, team_stats)
+        
+        if winner in win_counts:
+            win_counts[winner] += 1
+    
+    # Convert to percentages
+    total = max(1, sum(win_counts.values()))
+    return {team: (count/total)*100 for team, count in win_counts.items()}
+
+def predict_winner(team1, team2, model, le, team_stats):
+    try:
+        # Create feature vector - MUST MATCH YOUR MODEL'S TRAINING FEATURES
+        features = np.array([
+            team_stats.get(team1, {}).get('points_against_avg', 0),  # home_points_against_avg
+            team_stats.get(team2, {}).get('points_against_avg', 0),  # away_points_against_avg
+            team_stats.get(team1, {}).get('win_pct', 0.5),           # home_win_pct
+            le.transform([team1])[0],                                 # home_team_encoded
+            team_stats.get(team2, {}).get('win_pct', 0.5)             # away_win_pct
+        ]).reshape(1, -1)
+        
+        # Verify feature count matches model
+        assert features.shape[1] == model.n_features_in_
+        
+        probs = model.predict_proba(features)[0]
+        winner_idx = np.random.choice(len(probs), p=probs)
+        return le.inverse_transform([winner_idx])[0]
+    except Exception as e:
+        # Fallback to random choice if prediction fails
+        print(f"Prediction failed for {team1} vs {team2}: {e}")
+        return random.choice([team1, team2])
+```
+
+
+
+
+```{python revised-monte-carlo echo=FALSE}
+#| echo: false
+top_teams = [
+    'New Zealand', 'South Africa', 'Australia', 
+    'England', 'France', 'Ireland', 
+    'Wales', 'Scotland', 'Argentina', 'Italy'
+]
+
+print("\nRunning enhanced simulation...")
+win_probs = enhanced_world_cup_simulation(
+    top_teams, 
+    best_model, 
+    le, 
+    team_stats,  
+    n_simulations=10000
+)
+
+# Display results again
+print("\nPredicted 2027 Rugby World Cup Win Probabilities with Optimized Model:")
+for team, prob in sorted(win_probs.items(), key=lambda x: x[1], reverse=True):
+    if prob > 0:
+        print(f"{team}: {prob:.1f}%")
+```
+
+Interestingly, after creating a model that prioritizes the top features while avoiding comprimising performance, New Zealand now slips to 7th. This could be because of the way the features appear in the forest and how those features favor England.
+
+Maybe the next steps could be uncovering the exact reasons as to this change.

@@ -1,0 +1,61 @@
+# Rugby World Cup Prediction Project
+
+## Overview
+This project aims to predict the winner of the 2027 Rugby World Cup by analyzing historical match data from tier-one rugby nations. The analysis focuses on team performance metrics such as win percentages, points scored/conceded, and home/away advantages to build predictive models.
+
+## Key Features
+- **Data Analysis**: Explores team performance trends from 1999 to 2024.
+- **Visualizations**: Includes interactive plots for win percentages, scoring/conceding averages, and World Cup vs. non-World Cup performance.
+- **Predictive Modeling**: Uses machine learning techniques (XGBoost, Random Forest, and Ordinal Logistic Regression) to forecast outcomes.
+- **Monte Carlo Simulations**: Simulates tournament scenarios to quantify uncertainty in predictions.
+
+## Data Sources
+- **Dataset**: Contains 2,783 international rugby matches, filtered to 1,230 matches post-1999 involving tier-one teams.
+- **Variables**: Includes match dates, teams, scores, competition types, and derived metrics like win rates and point differentials.
+
+## Methodology
+1. **Data Preparation**:
+   - Filtered matches post-1999 and tier-one teams.
+   - Engineered features such as home/away win percentages and average points scored/conceded.
+   - Created binary indicators for match outcomes.
+
+2. **Exploratory Data Analysis (EDA)**:
+   - Visualized team performance over time.
+   - Compared home vs. away performance and World Cup vs. non-World Cup metrics.
+
+3. **Modeling**:
+   - **XGBoost Classifier**: Predicts match winners with Monte Carlo simulations for uncertainty.
+   - **Random Forest**: Identifies key performance indicators.
+   - **Ordinal Logistic Regression**: Predicts tournament stages reached by teams.
+
+## Key Insights
+- **Dominant Teams**: New Zealand, South Africa, and Ireland show consistent high performance.
+- **Home Advantage**: All teams perform significantly better at home.
+- **World Cup Performance**: Some teams (e.g., Scotland) struggle under tournament pressure.
+
+## Project Structure
+- **`EDAtemplate.pdf`**: Contains detailed EDA and visualizations.
+- **`Preliminary Analysis.html`**: HTML report of the analysis, including code and results.
+- **Data**: Original and processed datasets (not included in this repository).
+
+## Dependencies
+- Python 3.x
+- Libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `xgboost`, `statsmodels`
+
+## Usage
+1. Clone the repository.
+2. Install dependencies: `pip install -r requirements.txt`.
+3. Run the Jupyter notebook or Python scripts to reproduce the analysis.
+
+## Results
+The model predicts the following probabilities for the 2027 Rugby World Cup winner:
+- New Zealand: 16.0%
+- England: 13.1%
+- France: 12.4%
+- South Africa: 11.5%
+- Ireland: 11.4%
+
+## Contributors
+- Ken Kabeya
+- Aneesh Koppolu
+

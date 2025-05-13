@@ -1,1 +1,59 @@
 # project
+Dataset Overview
+This dataset contains historical records of rugby union matches, including international fixtures and tournaments, from 1871 to 1990. The data covers matches involving teams from Scotland, England, Ireland, Wales, France, and other nations, with details such as scores, locations, and competition names.
+
+Data Source
+The data was compiled from historical rugby match records, likely sourced from official rugby archives or databases. The exact source is not specified in the provided file.
+
+File Information
+File Name: rugby.csv
+
+Format: CSV (Comma-Separated Values)
+
+Size: [Not specified in the provided data]
+
+Codebook
+Refer to the codebook below for a detailed description of each column in the dataset.
+
+## Variable Descriptions
+
+| Variable        | Type      | Description                                                                 |
+|----------------|-----------|-----------------------------------------------------------------------------|
+| `date`         | Date      | Match date in `YYYY-MM-DD` format.                                         |
+| `home_team`    | String    | Home team name (e.g., `Scotland`, `England`).                              |
+| `away_team`    | String    | Away team name (e.g., `Wales`, `France`).                                  |
+| `home_score`   | Integer   | Points scored by the home team.                                            |
+| `away_score`   | Integer   | Points scored by the away team.                                            |
+| `competition`  | String    | Tournament name (e.g., `Five Nations Championship`, `Rugby World Cup`).   |
+| `stadium`      | String    | Venue name (e.g., `Twickenham`, `Murrayfield`).                            |
+| `city`         | String    | City where the match was played.                                           |
+| `country`      | String    | Host country (e.g., `Scotland`, `New Zealand`).                            |
+| `neutral`      | Boolean   | `True` if played at a neutral venue, `False` otherwise.                    |
+| `world_cup`    | Boolean   | `True` if part of the Rugby World Cup, `False` otherwise.                  |
+
+## Key Notes
+- **Neutral Venues**: Matches where neither team is the "home" side (e.g., World Cup finals).
+- **Historical Data**: Early records (pre-1950) may lack stadium/city details.
+- **Scores**: Ties are recorded as equal values (e.g., `3-3`).
+
+## Notes
+
+Neutral Venue: A neutral venue is one where neither team is the home team (e.g., a tournament final held at a predetermined location).
+
+World Cup Matches: The world_cup column flags matches that are part of the Rugby World Cup (e.g., True for World Cup games, False otherwise).
+
+Historical Context: Some older matches may lack detailed metadata (e.g., stadium names or exact competition names).
+
+## Potential Uses
+Analyze historical trends in rugby performance.
+
+Compare team performance across different competitions.
+
+Study the evolution of rugby tournaments over time.
+
+## Limitations
+The dataset does not include player-level statistics or match events (e.g., tries, penalties).
+
+Some early records may have missing or incomplete data.
+
+

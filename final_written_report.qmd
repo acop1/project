@@ -872,7 +872,7 @@ Maybe the next steps could be uncovering the exact reasons as to this change.
 
 ####What we would do differently next time
 
-- Plan better 
-
-- 
+- One of the primary areas for improvement lies in the depth and clarity of our predictive modeling approach. Although we used XGBoost as a classifier, the report lacked detailed documentation of the modeling pipeline. Important elements such as the definition of the target variable, the rationale for selecting input features, and performance metrics (e.g., accuracy, AUC, F1-score) were either underdeveloped or omitted. Without this transparency, it is difficult to gauge the reliability and generalizability of our predictions. 
+-   Another key limitation concerns the treatment of time in our dataset. By aggregating team performance over the entire 25-year period, we risk masking temporal trends that are crucial for forecasting. For example, a team like England may have exhibited peak performance in the early 2000s but declined in later years—averaging across eras erases these nuances. To better capture form and momentum, we recommend segmenting the data into discrete World Cup cycles (e.g., 1999–2002, 2003–2006, etc.) and calculating team-level metrics for each period. This time-aware approach would allow us to assess the predictive power of pre-tournament form on RWC success more accurately.
+-   Another methodological enhancement would be to implement a more rigorous validation strategy. Rather than predicting the 2027 World Cup in isolation, we could simulate “leave-one-tournament-out” validation. This approach would involve using data from previous cycles to predict each past tournament (e.g., using 1999–2002 data to predict 2003, and so on). Doing so would help test the generalizability of our models across different eras and improve confidence in our forecasting methodology.
 

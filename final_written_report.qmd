@@ -726,6 +726,7 @@ Interpretation
 
 Cover helps detect broadly influential features, but it doesn’t directly measure predictive power.
 
+####Feature Selection and Model Optimization
 ```{python feature-selection echo=FALSE}
 #| echo: false
 #will use the top 5 gain features for the revised model
@@ -868,3 +869,10 @@ for team, prob in sorted(win_probs.items(), key=lambda x: x[1], reverse=True):
 Interestingly, after creating a model that prioritizes the top features while avoiding comprimising performance, New Zealand now slips to 7th. This could be because of the way the features appear in the forest and how those features favor England.
 
 Maybe the next steps could be uncovering the exact reasons as to this change.
+
+####What we would do differently next time
+
+- Plan better 
+
+- 
+

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -29,10 +29,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="README_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="README_files/libs/quarto-html/anchor.min.js"></script>
 <link href="README_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="README_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="README_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="README_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="README_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="README_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="README_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -48,6 +48,111 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="project" class="level1">
 <h1>project</h1>
+<p>Dataset Overview This dataset contains historical records of rugby union matches, including international fixtures and tournaments, from 1871 to 1990. The data covers matches involving teams from Scotland, England, Ireland, Wales, France, and other nations, with details such as scores, locations, and competition names.</p>
+<p>Data Source The data was compiled from historical rugby match records, likely sourced from official rugby archives or databases. The exact source is not specified in the provided file.</p>
+<p>File Information File Name: rugby.csv</p>
+<p>Format: CSV (Comma-Separated Values)</p>
+<p>Size: [Not specified in the provided data]</p>
+<p>Codebook Refer to the codebook below for a detailed description of each column in the dataset.</p>
+<section id="variable-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="variable-descriptions">Variable Descriptions</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 74%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>date</code></td>
+<td>Date</td>
+<td>Match date in <code>YYYY-MM-DD</code> format.</td>
+</tr>
+<tr class="even">
+<td><code>home_team</code></td>
+<td>String</td>
+<td>Home team name (e.g., <code>Scotland</code>, <code>England</code>).</td>
+</tr>
+<tr class="odd">
+<td><code>away_team</code></td>
+<td>String</td>
+<td>Away team name (e.g., <code>Wales</code>, <code>France</code>).</td>
+</tr>
+<tr class="even">
+<td><code>home_score</code></td>
+<td>Integer</td>
+<td>Points scored by the home team.</td>
+</tr>
+<tr class="odd">
+<td><code>away_score</code></td>
+<td>Integer</td>
+<td>Points scored by the away team.</td>
+</tr>
+<tr class="even">
+<td><code>competition</code></td>
+<td>String</td>
+<td>Tournament name (e.g., <code>Five Nations Championship</code>, <code>Rugby World Cup</code>).</td>
+</tr>
+<tr class="odd">
+<td><code>stadium</code></td>
+<td>String</td>
+<td>Venue name (e.g., <code>Twickenham</code>, <code>Murrayfield</code>).</td>
+</tr>
+<tr class="even">
+<td><code>city</code></td>
+<td>String</td>
+<td>City where the match was played.</td>
+</tr>
+<tr class="odd">
+<td><code>country</code></td>
+<td>String</td>
+<td>Host country (e.g., <code>Scotland</code>, <code>New Zealand</code>).</td>
+</tr>
+<tr class="even">
+<td><code>neutral</code></td>
+<td>Boolean</td>
+<td><code>True</code> if played at a neutral venue, <code>False</code> otherwise.</td>
+</tr>
+<tr class="odd">
+<td><code>world_cup</code></td>
+<td>Boolean</td>
+<td><code>True</code> if part of the Rugby World Cup, <code>False</code> otherwise.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="key-notes" class="level2">
+<h2 class="anchored" data-anchor-id="key-notes">Key Notes</h2>
+<ul>
+<li><strong>Neutral Venues</strong>: Matches where neither team is the “home” side (e.g., World Cup finals).</li>
+<li><strong>Historical Data</strong>: Early records (pre-1950) may lack stadium/city details.</li>
+<li><strong>Scores</strong>: Ties are recorded as equal values (e.g., <code>3-3</code>).</li>
+</ul>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<p>Neutral Venue: A neutral venue is one where neither team is the home team (e.g., a tournament final held at a predetermined location).</p>
+<p>World Cup Matches: The world_cup column flags matches that are part of the Rugby World Cup (e.g., True for World Cup games, False otherwise).</p>
+<p>Historical Context: Some older matches may lack detailed metadata (e.g., stadium names or exact competition names).</p>
+</section>
+<section id="potential-uses" class="level2">
+<h2 class="anchored" data-anchor-id="potential-uses">Potential Uses</h2>
+<p>Analyze historical trends in rugby performance.</p>
+<p>Compare team performance across different competitions.</p>
+<p>Study the evolution of rugby tournaments over time.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p>The dataset does not include player-level statistics or match events (e.g., tries, penalties).</p>
+<p>Some early records may have missing or incomplete data.</p>
+</section>
 </section>
 
 </main>
@@ -134,8 +239,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -246,7 +349,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

@@ -104,7 +104,7 @@ from sklearn.metrics import accuracy_score
 import xgboost as xgb
 from collections import defaultdict
 import random
-rugbyDF = pd.read_csv("data/rugby.csv")
+rugbyDF = pd.read_csv("rugby.csv")
 rugbyDF.shape
 #(2783, 11)
 ```
@@ -493,7 +493,7 @@ Monte Carlo (MC) simulations are used to model uncertainty and probabilistic out
 ```{python model-prediction echo=FALSE}
 #| echo: false
 # Load the dataset
-df = pd.read_csv('data/rugby.csv')
+df = pd.read_csv('rugby.csv')
 df['year'] = df['date'].str[0:4].astype(int)
 df = df[df.year > 1998]
 # Data preprocessing
@@ -870,7 +870,7 @@ Interestingly, after creating a model that prioritizes the top features while av
 
 Maybe the next steps could be uncovering the exact reasons as to this change.
 
-####What we would do differently next time
+### **What we would do differently next time**
 
 - One of the primary areas for improvement lies in the depth and clarity of our predictive modeling approach. Although we used XGBoost as a classifier, the report lacked detailed documentation of the modeling pipeline. Important elements such as the definition of the target variable, the rationale for selecting input features, and performance metrics (e.g., accuracy, AUC, F1-score) were either underdeveloped or omitted. Without this transparency, it is difficult to gauge the reliability and generalizability of our predictions. 
 -   Another key limitation concerns the treatment of time in our dataset. By aggregating team performance over the entire 25-year period, we risk masking temporal trends that are crucial for forecasting. For example, a team like England may have exhibited peak performance in the early 2000s but declined in later years—averaging across eras erases these nuances. To better capture form and momentum, we recommend segmenting the data into discrete World Cup cycles (e.g., 1999–2002, 2003–2006, etc.) and calculating team-level metrics for each period. This time-aware approach would allow us to assess the predictive power of pre-tournament form on RWC success more accurately.
